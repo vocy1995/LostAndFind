@@ -215,6 +215,13 @@
             android:layout_centerInParent="true"
             android:background="#D5D5D5"></View>
 
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="nodejs_test"
+            android:text="Test_nodejs" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"

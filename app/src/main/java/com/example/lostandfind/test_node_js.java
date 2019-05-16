@@ -61,7 +61,8 @@ public class test_node_js extends AppCompatActivity {
 
             public void onClick(View view) {
 
-                new JSONTask().execute("http://127.0.0.0:3000");//AsyncTask 시작시킴
+                new JSONTask().execute("http://192.168.0.143:3000/post");//AsyncTask 시작시킴
+                //http://자신의 IP주소:포트
 
             }
 
@@ -85,7 +86,7 @@ public class test_node_js extends AppCompatActivity {
                 jsonObject.accumulate("user_id", "androidTest");
 
                 jsonObject.accumulate("name", "yun");
-
+                //accumulate이거 뒤에가 데이터 전송하는거라 여기서 TEXTVIEW 로그인 뷰 긁어오면 데이터 전송은 가능 근데 전송한 데이터를 db로 넣어야할듯
                 HttpURLConnection con = null;
 
                     BufferedReader reader = null;

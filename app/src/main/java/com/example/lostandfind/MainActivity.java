@@ -1,6 +1,7 @@
-package com.example.lostandfind;
+package com.example.timeline_test;
 
-import android.os.AsyncTask;
+import android.content.Intent;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,19 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     String[] middle_category_items = {"중분류 선택", "중분류1", "중분류2", "중분류3"};
     String[] small_category_items = {"소분류 선택", "소분류1", "소분류2", "소분류3"};
     String[] color_category_items = {"색깔 선택", "빨강", "초록", "노랑", "파랑", "검정", "분홍"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +73,12 @@ public class MainActivity extends AppCompatActivity {
                 this, android.R.layout.simple_spinner_item, color_category_items);
         adapter_color_category.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_color_category.setAdapter(adapter_color_category);
+
+
+    }
+    public void nodejs_test(View view) {
+
+        Intent intent = new Intent(MainActivity.this,test_node_js.class);
+        startActivity(intent);
     }
 }
-
-
-
-
