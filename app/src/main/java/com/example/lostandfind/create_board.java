@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.create_board);
 
         //취소 버튼 이벤트 -> 뒤로가기
         Button btn_cancel = (Button) findViewById(R.id.btn_cancel);
