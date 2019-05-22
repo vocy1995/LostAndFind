@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    // 전체 레이아웃
+    <LinearLayout
+        android:layout_width="395dp"
+        android:layout_height="715dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="4dp"
+        tools:layout_editor_absoluteY="16dp">
+
+        // 어플 로고
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:srcCompat="@drawable/ic_laflogo"
+            app:srcCompat="@drawable/ic_laflogo" />
+
+        // 아이디 입력 레이아웃
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="40dp"
+            android:weight="right"
+            android:gravity="bottom"
+            android:weightSum="3">
+
+            // 아이디 아이콘
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_person_black_24dp"
+                tools:ignore="VectorDrawableCompat" />
+
+            //아이디 입력창
+
+            <EditText
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="2" />
+
+        </LinearLayout>
+
+        // 패스워드 입력 레이아웃
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:gravity="bottom"
+            android:weight="right">
+
+            //패스워드 아이콘
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:srcCompat="@drawable/ic_lock_outline_black_24dp" />
+
+            // 패스워드 입력창
+
+            <EditText
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="2" />
+        </LinearLayout>
+
+        //아이디, 패스워드 찾기 레이아웃
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            //아이디,패스워드 찾기 버튼
+            <Button
+                android:id="@+id/button"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="#00ff0000"
+                android:text="아이디 / 비밀번호 찾기" />
+        </LinearLayout>
+
+        // 로그인 버튼 레이아웃
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            android:layout_marginTop="40dp">
+
+            //로그인 버튼
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#A263FA"
+                android:text="로그인" />
+        </LinearLayout>
+
+        // 회원등록 레이아웃
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00ff0000"
+                android:text="멤버가 아니십니까?                  회원가입" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
