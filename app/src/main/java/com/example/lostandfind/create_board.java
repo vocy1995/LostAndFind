@@ -1,4 +1,4 @@
-package com.example.timeline_test;
+package com.example.loatandfind;
 
 import android.content.Intent;
 
@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 
-public class MainActivity extends AppCompatActivity {
+public class create_board extends AppCompatActivity {
 
     //콤보박스 값 넣기
     String[] type_question_items = {"게시글 선택", "분실물", "습득물"};
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_board);
+        setContentView(R.layout.activity_main);
 
         //취소 버튼 이벤트 -> 뒤로가기
         Button btn_cancel = (Button) findViewById(R.id.btn_cancel);
@@ -76,9 +76,5 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    public void nodejs_test(View view) {
 
-        Intent intent = new Intent(MainActivity.this,test_node_js.class);
-        startActivity(intent);
-    }
 }
