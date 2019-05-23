@@ -1,7 +1,11 @@
 package com.example.lostandfind;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +24,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,6 +37,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class create_board extends AppCompatActivity {
+    //갤러리
+    private final int PICK_FROM_CAMERA = 0;
+    private final int PICK_FROM_ALBUM = 1;
+
+    private Uri mImageCaptureUri;
+
     //데이터를 받아올 URL
     String url = "http://192.168.0.68:3000/androidSendData";
     //php를 읽어올때 사용할 변수
@@ -167,6 +179,33 @@ public class create_board extends AppCompatActivity {
                     new JSONTask().execute("http://192.168.0.68:3000/data");
                 }
             }
+        });
+
+        //갤러리 버튼 클릭 이벤트
+        ImageButton btn_gall = (ImageButton) findViewById(R.id.photo_btn);
+        btn_gall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //갤러리 오픈
+                Intent gall_intent = new Intent(Intent.ACTION_PICK);
+                gall_intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                startActivityForResult(gall_intent, PICK_FROM_ALBUM);
+            }
+        });
+
+        //카메라 버튼 클릭 이벤트
+        ImageButton btn_camera = (ImageButton) findViewById(R.id.camera_btn);
+        btn_camera.setOnClickListener(new View.OnClickListener(){
+          @Override
+          public void onClick(View v) {
+              Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+              //임시로 사용할 파일의 경로를 생성
+              String url = "tmp_" + String.valueOf(System.currentTimeMillis() + ".jpg");
+              mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
+              camera_intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+              startActivityForResult(camera_intent, PICK_FROM_CAMERA);
+          }
         });
 
         //콤보박스 값 넣기
