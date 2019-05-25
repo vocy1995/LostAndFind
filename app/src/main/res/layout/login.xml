@@ -13,7 +13,7 @@
         android:layout_width="200dp"
         android:layout_height="250dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         app:srcCompat="@drawable/ic_laflogo" />
 
     // 아이디 입력 레이아웃
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="45dp"
         android:gravity="bottom"
         android:weightSum="3">
 
@@ -78,18 +78,29 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="10dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        //아이디,패스워드 찾기 버튼
+        //아이디 찾기
 
         <Button
-            android:id="@+id/button"
-            android:layout_width="250dp"
+            android:id="@+id/btn_id_find"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:background="#00ff0000"
+            android:layout_marginLeft="135dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/shadow"
             android:onClick="IDPW"
-            android:text="아이디 / 비밀번호 찾기" />
+            android:text="아이디 찾기" />
+
+        //패스워드 찾기
+        <Button
+            android:id="@+id/btn_pw_reset"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shadow"
+            android:text="패스워드 재설정"
+            android:gravity="center"/>
     </LinearLayout>
 
     // 로그인 버튼 레이아웃
@@ -102,7 +113,7 @@
         //로그인 버튼
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/btn_login"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -115,15 +126,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/btn_sign"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#00ff0000"
             android:onClick="sign"
-            android:text="멤버가 아니십니까?                  회원가입" />
+            android:text="멤버가 아니십니까?           회원가입"
+            android:gravity="center"/>
     </LinearLayout>
 </LinearLayout>
