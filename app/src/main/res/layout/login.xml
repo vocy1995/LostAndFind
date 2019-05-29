@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    // 어플 로고
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        app:srcCompat="@drawable/ic_laflogo" />
+
+    // 아이디 입력 레이아웃
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="45dp"
+        android:gravity="bottom"
+        android:weightSum="3">
+
+        // 아이디 아이콘
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_person_black_24dp"
+            tools:ignore="VectorDrawableCompat" />
+
+        //아이디 입력창
+
+        <EditText
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="50dp"
+            android:layout_weight="2" />
+
+    </LinearLayout>
+
+    // 패스워드 입력 레이아웃
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:gravity="bottom">
+
+        //패스워드 아이콘
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_lock_outline_black_24dp" />
+
+        // 패스워드 입력창
+
+        <EditText
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="50dp"
+            android:layout_weight="2" />
+    </LinearLayout>
+
+    //아이디, 패스워드 찾기 레이아웃
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        //아이디 찾기
+
+        <Button
+            android:id="@+id/btn_id_find"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginLeft="135dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/shadow"
+            android:onClick="IDPW"
+            android:text="아이디 찾기" />
+
+        //패스워드 찾기
+        <Button
+            android:id="@+id/btn_pw_reset"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shadow"
+            android:text="패스워드 재설정"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    // 로그인 버튼 레이아웃
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp">
+
+        //로그인 버튼
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#A263FA"
+            android:onClick="Login"
+            android:text="로그인" />
+    </LinearLayout>
+
+    // 회원등록 레이아웃
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_sign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00ff0000"
+            android:onClick="sign"
+            android:text="멤버가 아니십니까?           회원가입"
+            android:gravity="center"/>
+    </LinearLayout>
+</LinearLayout>
