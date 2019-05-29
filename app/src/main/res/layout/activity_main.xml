@@ -13,8 +13,8 @@
         android:layout_marginStart="72dp"
         android:layout_marginEnd="102dp"
         android:layout_marginBottom="140dp"
-        android:text="게시글"
         android:onClick="create"
+        android:text="게시글"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button4"
         app:layout_constraintStart_toStartOf="parent" />
@@ -25,9 +25,22 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="67dp"
         android:layout_marginBottom="132dp"
-        android:text="테스트"
         android:onClick="test"
+        android:text="테스트"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button3" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="43dp"
+        android:onClick="board"
+        android:text="timeline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
