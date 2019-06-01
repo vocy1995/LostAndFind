@@ -21,6 +21,7 @@
         <activity android:name=".GetImageActivity" />
         <activity android:name=".NodeJs_Image_Test" />
         <activity android:name=".TimeLine_test"/>
+        <activity android:name=".SingleItemView"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
