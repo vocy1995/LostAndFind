@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lostandfind">
+    <!--위치정보 접근을 위한 퍼미션-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <!--인터넷 연결 허용하는 퍼미션 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -29,6 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+          android:name=".MapsActivity"
+          android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>
