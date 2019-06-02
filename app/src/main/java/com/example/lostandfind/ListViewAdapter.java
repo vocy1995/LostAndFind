@@ -1,4 +1,4 @@
-package com.example.loatandfind;
+package com.example.lostandfind;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,10 +46,14 @@ public class ListViewAdapter extends BaseAdapter {
 
     public View getView(final int position, View convertView, ViewGroup parent) {
         // Declare Variables
-        TextView rank;
-        TextView country;
-        TextView population;
-        ImageView flag;
+        TextView title;
+        TextView writer;
+        TextView time;
+        TextView hash_tag;
+        TextView content;
+        TextView no;
+        ArrayList<Integer> board_no = new ArrayList<>();
+        ImageView image;
 
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -60,38 +64,49 @@ public class ListViewAdapter extends BaseAdapter {
         resultp = data.get(position);
 
         // Locate the TextViews in listview_item.xml
-        rank = (TextView) itemView.findViewById(R.id.rank);
-        country = (TextView) itemView.findViewById(R.id.country);
-        population = (TextView) itemView.findViewById(R.id.population);
+        title = (TextView) itemView.findViewById(R.id.title);
+        writer = (TextView) itemView.findViewById(R.id.writer);
+        time = (TextView) itemView.findViewById(R.id.time);
+        hash_tag = (TextView) itemView.findViewById(R.id.hashtag);
+        content = (TextView) itemView.findViewById(R.id.content);
         // Locate the ImageView in listview_item.xml
-        flag = (ImageView) itemView.findViewById(R.id.flag);
+        image = (ImageView) itemView.findViewById(R.id.image);
+        for(int count=0; count<=position;count++){
+            board_no.add(position);
+        }
+
+
+
 
         // Capture position and set results to the TextViews
-        rank.setText(resultp.get(TimeLine_test.RANK));
-        country.setText(resultp.get(TimeLine_test.COUNTRY));
-        population.setText(resultp.get(TimeLine_test.POPULATION));
+        title.setText(resultp.get(TimeLine_test.TITLE));
+        writer.setText(resultp.get(TimeLine_test.WRITER));
+        time.setText(resultp.get(TimeLine_test.TIME));
+        hash_tag.setText(resultp.get(TimeLine_test.HASH_TAG));
+        content.setText(resultp.get(TimeLine_test.CONTENT));
         // Capture position and set results to the ImageView
         // Passes flag images URL into ImageLoader.class to download and cache
         // images
-        imageLoader.DisplayImage(resultp.get(TimeLine_test.FLAG), flag);
+        imageLoader.DisplayImage(resultp.get(TimeLine_test.IMAGE), image);
         // Capture button clicks on ListView items
-       itemView.setOnClickListener(new OnClickListener() {
-
+        itemView.setOnClickListener(new OnClickListener() {
+            HashMap<String, String> single_resultp = new HashMap<String, String>();
             @Override
             public void onClick(View arg0) {
                 // Get the position from the results
-                HashMap<String, String> single_resultp = new HashMap<String, String>();
+
+                //single_resultp = new ArrayList<HashMap<String, String>>();
                 single_resultp = data.get(position);
                 // Send single item click data to SingleItemView Class
                 Intent intent = new Intent(context, SingleItemView.class);
                 // Pass all data rank
-                intent.putExtra("rank", single_resultp.get(TimeLine_test.RANK));
+                intent.putExtra("no",single_resultp.get(TimeLine_test.NO));
                 // Pass all data country
-                intent.putExtra("country", single_resultp.get(TimeLine_test.COUNTRY));
+                //intent.putExtra("writer", single_resultp.get(TimeLine_test.WRITER));
                 // Pass all data population
-                intent.putExtra("population", single_resultp.get(TimeLine_test.POPULATION));
+
                 // Pass all data flag
-                intent.putExtra("flag", single_resultp.get(TimeLine_test.FLAG));
+
                 // Start SingleItemView Class
                 context.startActivity(intent);
 
