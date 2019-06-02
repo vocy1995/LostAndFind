@@ -34,7 +34,7 @@ android:layout_height="match_parent">
 
     //인증번호 입력
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textview_auth_input"
         android:layout_width="280dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
@@ -45,39 +45,45 @@ android:layout_height="match_parent">
         android:paddingLeft="10dp"
         />
 
-    // 인증 설명 텍스트
-    <TextView
-        android:id="@+id/textView4"
+    // 인증 설명 + 제한시간 레이아웃
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="15dp"
-        android:text="전송된 인증번호를 5분 이내에 입력하세요."
-        android:textSize="13dp"
-        android:textColor="#CD5C5C"
-        android:gravity="center_vertical"
-        android:paddingLeft="70dp"/>
+        android:orientation="horizontal">
 
-    // 이메일 인증 시간
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="5:00"
-        android:textSize="30dp"
-        android:layout_marginTop="30dp"
-        android:gravity="center" />
+        // 인증설명
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="223dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginLeft="50dp"
+            android:text="전송된 인증번호를 5분 이내에 입력하세요."
+            android:textColor="#CD5C5C"
+            android:textSize="10dp" />
 
-    // 인증하기
+        // 인증 제한시간
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="5:00"
+            android:textSize="15dp"
+            android:textColor="#CD5C5C" />
+    </LinearLayout>
+
+    // 인증버튼
     <Button
         android:id="@+id/btn_email_auth"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="#A263FA"
-        android:text="Authentication"
-        android:textSize="15dp"
-        android:layout_marginBottom="30dp"
         android:layout_gravity="center"
-        android:stateListAnimator="@null" />
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:background="#A9A9F5"
+        android:stateListAnimator="@null"
+        android:text="Authentication"
+        android:textSize="15dp" />
 
 </LinearLayout>

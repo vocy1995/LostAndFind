@@ -28,14 +28,15 @@
         android:layout_marginTop="100dp">
 
         <TextView
+            android:id="@+id/textview_sign_name"
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginLeft="45dp"
             android:background="@drawable/textview_edge"
-            android:text="NAME"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
+            android:text="NAME"
             android:textSize="15dp" />
 
     </LinearLayout>
@@ -50,7 +51,7 @@
         //이메일 입력
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/textview_sign_email"
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -62,7 +63,7 @@
             android:text="E-mail" />
 
         <Button
-            android:id="@+id/btn_email_send"
+            android:id="@+id/btn_sign_sendemail"
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
@@ -80,7 +81,7 @@
 
         //아이디 입력
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textview_sign_id"
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -94,10 +95,11 @@
 
         // 중복확인
         <Button
-            android:id="@+id/btn_id_check"
+            android:id="@+id/btn_sign_checkid"
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:background="@drawable/id_check"
+            android:onClick="email_send"
             android:layout_marginLeft="10dp"
             android:stateListAnimator="@null"
             android:text="check"/>
@@ -114,7 +116,7 @@
 
         //패스워드 입력
         <TextView
-            android:id="@+id/textView_PW1"
+            android:id="@+id/textview_sign_pw"
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -137,7 +139,7 @@
 
         //패스워드 재입력
         <TextView
-            android:id="@+id/textView_PW2"
+            android:id="@+id/textview_sign_repeatpw"
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -151,7 +153,7 @@
 
         // 동일 여부 체크 표시
         <ImageView
-            android:id="@+id/setImage"
+            android:id="@+id/image_sign_checkpw"
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
@@ -161,16 +163,18 @@
 
     </LinearLayout>
     // 인증하기
+
     <Button
-        android:id="@+id/btn_signup"
-        android:layout_width="280dp"
+        android:id="@+id/btn_sign_signup"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:background="#A263FA"
-        android:text="Sign-Up"
-        android:textSize="15dp"
-        android:layout_marginBottom="30dp"
         android:layout_gravity="center"
-        android:stateListAnimator="@null" />
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="30dp"
+        android:background="#A9A9F5"
+        android:onClick="sign_account"
+        android:stateListAnimator="@null"
+        android:text="Sign-Up"
+        android:textSize="15dp" />
     >
 </LinearLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    // 아이디 레이아웃
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="200dp">
+
+        //아이디 입력
+        <TextView
+            android:id="@+id/textview_search"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="35dp"
+            android:background="@drawable/textview_edge"
+            android:textSize="15dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"/>
+
+        // 중복확인
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/id_check"
+            android:onClick="email_send"
+            android:stateListAnimator="@null"
+            android:text="search"/>
+
+    </LinearLayout>
+</LinearLayout>
