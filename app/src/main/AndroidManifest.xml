@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lostandfind">
+    <!--위치정보 접근을 위한 퍼미션-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <!--인터넷 연결 허용하는 퍼미션 -->
-    <uses-permission android:name="android.permission.InTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,6 +18,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".create_board" />
+        <activity android:name=".Multer" />
+        <activity android:name=".test_node_js" />
+        <activity android:name=".GetImageActivity" />
+        <activity android:name=".NodeJs_Image_Test" />
+        <activity android:name=".TimeLine_test"/>
+        <activity android:name=".SingleItemView"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,6 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+          android:name=".MapsActivity"
+          android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>
