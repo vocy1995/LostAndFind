@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,64 +63,65 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_centerInParent="true"
-        android:background="#D5D5D5">
-    </View>
+        android:background="#D5D5D5"></View>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:background="#FFF" >
+        android:background="#FFF"
+        android:orientation="vertical">
 
         <Spinner
             android:id="@+id/type_question"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="3dp"
             android:layout_width="match_parent"
-            android:padding="10dp"
-            android:layout_height="45dp">
-        </Spinner>
+            android:layout_height="45dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="10dp"
+            android:padding="10dp"></Spinner>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_centerInParent="true"
-            android:background="#D5D5D5">
-        </View>
+            android:background="#D5D5D5"></View>
+
         <EditText
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:hint="제목"
-            android:padding="5dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="3dp"
+            android:layout_marginRight="5dp"
             android:layout_marginBottom="3dp"
-            android:background="@null"/>
+            android:background="@null"
+            android:hint="제목"
+            android:padding="5dp" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_centerInParent="true"
-            android:background="#D5D5D5">
-        </View>
+            android:background="#D5D5D5"></View>
+
         <EditText
             android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:hint="분실장소 (동까지 기재)"
-            android:padding="5dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="3dp"
+            android:layout_marginRight="5dp"
             android:layout_marginBottom="3dp"
-            android:background="@null"/>
+            android:background="@null"
+            android:hint="분실장소 (동까지 기재)"
+            android:padding="5dp" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_centerInParent="true"
-            android:background="#D5D5D5">
-        </View>
+            android:background="#D5D5D5"></View>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -134,35 +136,37 @@
                 android:hint="내용"
                 android:padding="10dp" />
         </ScrollView>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_centerInParent="true"
-            android:background="#D5D5D5">
-        </View>
+            android:background="#D5D5D5"></View>
+
         <EditText
             android:id="@+id/hashTag"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:hint="태그"
-            android:padding="5dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="3dp"
+            android:layout_marginRight="5dp"
             android:layout_marginBottom="3dp"
-            android:background="@null"/>
+            android:background="@null"
+            android:hint="태그"
+            android:padding="5dp" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_centerInParent="true"
-            android:background="#D5D5D5">
-        </View>
+            android:background="#D5D5D5"></View>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
-            android:paddingTop="15dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="15dp">
 
             <ImageButton
                 android:id="@+id/photo_btn"
@@ -173,15 +177,6 @@
                 app:srcCompat="@mipmap/photo" />
 
             <ImageButton
-                android:id="@+id/camera_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@null"
-                app:srcCompat="@mipmap/camera" />
-
-
-            <ImageButton
                 android:id="@+id/map_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -189,11 +184,11 @@
                 android:background="#FFF"
                 app:srcCompat="@mipmap/map" />
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_centerInParent="true"
-            android:background="#D5D5D5">
-        </View>
+            android:background="#D5D5D5"></View>
     </LinearLayout>
 </LinearLayout>
