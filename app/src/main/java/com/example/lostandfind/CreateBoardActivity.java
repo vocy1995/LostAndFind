@@ -1,5 +1,6 @@
 package com.example.lostandfind;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -26,9 +27,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.content.pm.ResolveInfo;
+import android.location.Location;
 
+
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONObject;
 
@@ -66,25 +75,19 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class CreateBoardActivity extends AppCompatActivity {
     //갤러리
-    private final int PICK_FROM_CAMERA = 0;
-    private final int PICK_FROM_ALBUM = 1;
     private final static int IMAGE_RESULT = 200;
-    final int REQ_CODE_SELECT_IMAGE = 100;
-    private File tempFile;
-    String getImgURL = "";    //이미지 업로드에 사용될 URL
-    String getImgName = "";
-    private Uri mImageCaptureUri;   //카메라에 사용될 URL
 
     //데이터를 받아올 URL
-    String url = "http://192.168.60.54:3000";
+    String url = "http://192.168.0.41:3000";
 
     //Spinner 객체 및 변수 선언
     Spinner type_question;
     String type_question_text;
 
     //EditText 객체 및 변수 선언
-    EditText title, location, content, hashTag;
-    String title_text, location_text, content_text, hashTag_text;
+    TextView location;
+    EditText title, content, hashTag;
+    String title_text, location_text, content_text, hashTag_text, latitude, longitude;
 
     //해시태그 배열
     String[] tagArray;
@@ -110,6 +113,11 @@ public class CreateBoardActivity extends AppCompatActivity {
         askPermissions();
         initRetrofitClient();
 
+        title = (EditText) findViewById(R.id.title);
+        location = (TextView) findViewById(R.id.location);
+        content = (EditText) findViewById(R.id.content);
+        hashTag = (EditText) findViewById(R.id.hashTag);
+
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         type_question = (Spinner) findViewById(R.id.type_question);
@@ -130,31 +138,26 @@ public class CreateBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 type_question_text = type_question.getSelectedItem().toString();
-
-                title = (EditText) findViewById(R.id.title);
                 title_text = title.getText().toString();
-
-                location = (EditText) findViewById(R.id.location);
-                location_text = location.getText().toString();
-
-                content = (EditText) findViewById(R.id.content);
                 content_text = content.getText().toString();
-
-                hashTag = (EditText) findViewById(R.id.hashTag);
                 hashTag_text = hashTag.getText().toString();
+                location_text = location.getText().toString();
 
                 //빈공간확인 -> 확인 후 빈공간이 없으면 게시글 정보 서버로 전달 후 저장
                 if (type_question_text == "게시글 선택") {
                     Toast.makeText(getApplicationContext(), "빈공간이 있습니다.", Toast.LENGTH_SHORT).show();
                 } else if (title_text.length() == 0) {   // 제목 확인
                     Toast.makeText(getApplicationContext(), "빈공간이 있습니다.", Toast.LENGTH_SHORT).show();
-                } else if (location_text.length() == 0) {   //장소확인
+                } else if (location_text == "지도 아이콘을 클릭해서 위치를 지정해주세요") {   //장소확인
                     Toast.makeText(getApplicationContext(), "빈공간이 있습니다.", Toast.LENGTH_SHORT).show();
                 } else if (content_text.length() == 0) {    //내용확인
                     Toast.makeText(getApplicationContext(), "빈공간이 있습니다.", Toast.LENGTH_SHORT).show();
                 } else if (hashTag_text.length() == 0) {
                     Toast.makeText(getApplicationContext(), "빈공간이 있습니다.", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if(mBitmap == null){
+                    Toast.makeText(getApplicationContext(), "사진을 업로드 해주세요.", Toast.LENGTH_SHORT).show();
+
+                }else {
                     //중복확인 변수
                     int sameNum = 0;
                     stringTag = "";
@@ -168,7 +171,7 @@ public class CreateBoardActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "동일한 태그가 있습니다.", Toast.LENGTH_SHORT).show();
                     } else {
                         //URL 바꿔라 이건 텍스트 보내는거다
-                        new CreateBoardActivityJSONTask().execute("http://192.168.60.54:3000/createBoardText");
+                        new CreateBoardActivityJSONTask().execute(url+"/createBoardText");
                         multipartImageUpload();
                     }
                 }
@@ -202,35 +205,60 @@ public class CreateBoardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //화면 이동시 데이터 전송
                 //https://coding-factory.tistory.com/203
-                title = (EditText) findViewById(R.id.title);
                 title_text = title.getText().toString();
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                content_text = content.getText().toString();
+                hashTag_text = hashTag.getText().toString();
+                System.out.println(location.getText().toString());
+                Intent mapIntent = new Intent(getApplicationContext(), MapsActivity.class);
+                type_question_text = type_question.getSelectedItem().toString();
                 if (type_question_text == "게시글 선택") {
                     type_question_text = "";
                 }
-                intent.putExtra("boardType", type_question_text);
-                intent.putExtra("title", title_text);
-                intent.putExtra("content", content_text);
-                intent.putExtra("hashTag", hashTag_text);
-                startActivity(intent);
+                int boardTypePosition = 0;
+                for (int i = 0; i < 3; i++) {
+                    if (type_question_items[i] == type_question_text) {
+                        boardTypePosition = i;
+                        break;
+                    }
+                }
+                mapIntent.putExtra("boardType", String.valueOf(boardTypePosition));
+                mapIntent.putExtra("title", title_text);
+                mapIntent.putExtra("content", content_text);
+                mapIntent.putExtra("hashTag", hashTag_text);
+                startActivity(mapIntent);
             }
         });
-
         //콤보박스 값 넣기
         ArrayAdapter<String> adapter_type_question = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, type_question_items);
         adapter_type_question.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         type_question.setAdapter(adapter_type_question);
+
+        //intent 확인
+        Intent reqMapIntent = getIntent();
+        if (reqMapIntent.getExtras() == null) {
+            location.setText("지도 아이콘을 클릭해서 위치를 지정해주세요");
+        } else {
+            int type_questionPositon = Integer.parseInt(reqMapIntent.getExtras().getString("boardType"));
+            type_question.setSelection(type_questionPositon);
+            title.setText(reqMapIntent.getExtras().getString("title"));
+            content.setText(reqMapIntent.getExtras().getString("content"));
+            hashTag.setText(reqMapIntent.getExtras().getString("hashTag"));
+            location.setText(reqMapIntent.getExtras().getString("mapLocation"));
+            latitude = reqMapIntent.getExtras().getString("latitude");
+            longitude = reqMapIntent.getExtras().getString("longitude");
+        }
     }
-
-    //서버에서 데이터 가져오기
-
 
     //서버로 값전달
     public class CreateBoardActivityJSONTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
             try {
+                Intent reqMapIntent = getIntent();
+                latitude = reqMapIntent.getExtras().getString("latitude");
+                longitude = reqMapIntent.getExtras().getString("longitude");
+                System.out.println(latitude);
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.accumulate("type_question", type_question_text);
@@ -238,6 +266,8 @@ public class CreateBoardActivity extends AppCompatActivity {
                 jsonObject.accumulate("location", location_text);
                 jsonObject.accumulate("hashTag", stringTag);
                 jsonObject.accumulate("content", content_text);
+                jsonObject.accumulate("latitude", latitude);
+                jsonObject.accumulate("longitude", longitude);
 
                 //accumulate이거 뒤에가 데이터 전송하는거라 여기서 TEXTVIEW 로그인 뷰 긁어오면 데이터 전송은 가능 근데 전송한 데이터를 db로 넣어야할듯
                 HttpURLConnection con = null;
@@ -317,7 +347,7 @@ public class CreateBoardActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient.Builder().build();
 
         //URL 바꿔라 이건 이미지 업로드하는거다
-        createBoardApiService = new Retrofit.Builder().baseUrl("http://192.168.60.54:3000").client(client).build().create(CreateBoardApiService.class);
+        createBoardApiService = new Retrofit.Builder().baseUrl(url).client(client).build().create(CreateBoardApiService.class);
     }
 
     public Intent getPickImageChooserIntent() {
@@ -453,6 +483,7 @@ public class CreateBoardActivity extends AppCompatActivity {
                 .create()
                 .show();
     }
+
     private boolean canMakeSmores() {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
     }

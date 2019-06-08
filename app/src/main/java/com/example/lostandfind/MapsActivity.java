@@ -58,6 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //onCreateView에 사용
     MapView mapView;
     TextView mapTextView;
+    Button mapButton;
 
     //setCurrentLocation에 사용
     private static final LatLng DEFAULT_LOCATION = new LatLng(37.56, 126.97);
@@ -104,17 +105,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     PlaceAutocompleteFragment autocompleteFragment;
 
     int AUTOCOMPLETE_REQUEST_CODE = 1;
+    Intent getCreateBoardintent;
+
+    String intentBoardType, intentTitle, intentContent, intentHashTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        mapTextView = (TextView)findViewById(R.id.mapTextView);
+        mapTextView = (TextView) findViewById(R.id.mapTextView);
         //인텐트 값 가져오기
-        Intent intent = getIntent();
-        String title = intent.getExtras().getString("title");
-        System.out.println("title : " + title);
+        getCreateBoardintent = getIntent();
+        intentBoardType = getCreateBoardintent.getExtras().getString("boardType");
+        intentTitle = getCreateBoardintent.getExtras().getString("title");
+        intentContent = getCreateBoardintent.getExtras().getString("content");
+        intentHashTag = getCreateBoardintent.getExtras().getString("hashTag");
+        System.out.println("intentBoardType1 : " + intentBoardType);
+        System.out.println("intentTitle : " + intentTitle);
 
         //GPS 사용유무 가져오기
         gps = new GpsInfo(MapsActivity.this);
@@ -123,7 +131,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             user_longitude = gps.getLongitude();
 
             System.out.println("당신의 위도 : " + user_latitude);
-            mapTextView.setText("위도 : " + user_latitude + "경도 : " + user_longitude);
+            mapTextView.setText("위도 : " + user_latitude + "  경도 : " + user_longitude);
 
         } else {
             gps.showSettingsAlert();
@@ -136,6 +144,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
         }
+
+        mapButton = (Button) findViewById(R.id.mapButton);
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double intentLatitude, intentLongitude;
+                if(click_latitude == null){
+                    intentLatitude = user_latitude;
+                    intentLongitude = user_longitude;
+                }else{
+                    intentLatitude = click_latitude;
+                    intentLongitude = click_longitude;
+                }
+                System.out.println("intentLongitude : " + intentLongitude);
+                System.out.println("intentBoardType2 : " + intentBoardType);
+                System.out.println("intentTitle2 : " + intentTitle);
+                getCreateBoardintent = getIntent();
+                Intent createBoardIntent = new Intent(getApplicationContext(), CreateBoardActivity.class);
+                createBoardIntent.putExtra("boardType", intentBoardType);
+                createBoardIntent.putExtra("title", intentTitle);
+                createBoardIntent.putExtra("content", intentContent);
+                createBoardIntent.putExtra("hashTag", intentHashTag);
+                createBoardIntent.putExtra("latitude", String.valueOf(intentLatitude));
+                createBoardIntent.putExtra("longitude", String.valueOf(intentLongitude));
+                createBoardIntent.putExtra("mapLocation", mapTextView.getText().toString());
+                startActivity(createBoardIntent);
+            }
+        });
     }
 
     //권한요청
@@ -214,13 +250,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mOptions.position(new LatLng(click_latitude, click_longitude));
                 //마커(핀)추가
                 googleMap.addMarker(mOptions);
-                System.out.println("사용자가 선택함!");
+                mapTextView.setText("위도 : " + click_latitude + "  경도 : " + click_longitude);
             }
         });
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = (Place) Autocomplete.getPlaceFromIntent(data);
