@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="domestic_middle_category_items">
+        <item>중분류 선택</item>
+        <item>PC</item>
+        <item>모바일기기</item>
+        <item>주변기기</item>
+    </string-array>
+</resources>

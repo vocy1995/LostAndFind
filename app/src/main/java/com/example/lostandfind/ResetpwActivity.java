@@ -1,4 +1,4 @@
-package com.example.lap2;
+package com.example.lostandfind;
 
         import android.os.Bundle;
         import android.support.v7.app.AppCompatActivity;
