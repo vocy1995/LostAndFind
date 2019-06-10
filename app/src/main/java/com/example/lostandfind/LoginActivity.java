@@ -1,6 +1,6 @@
-package com.example.lap2;
-
+package com.example.lostandfind;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,19 +8,41 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
+    EditText id_edit,pw_edit;
+    String id,pw;
+    String success_message;
+    JSONArray jarray; //parse를 위한 jarray 사용
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+        id_edit=findViewById(R.id.textview_id_input);
+        pw_edit=findViewById(R.id.textview_pw_input);
         /*Toolbar toolbar = findViewById(R.id.);
         setSupportActionBar(toolbar);*/
 
         //로그인화면(회원가입버튼) -> 회원가입 화면btn_login
-        Button sign_btn = (Button) findViewById(R.id.btn_sign);
+        Button sign_btn = findViewById(R.id.btn_sign);
         sign_btn.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -32,9 +54,10 @@ public class LoginActivity extends AppCompatActivity {
         //로그인화면(로그인버튼) -> 홈 화면
         Button login_btn = findViewById(R.id.btn_login);
         login_btn.setOnClickListener(new Button.OnClickListener(){
+
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), TimeLine.class);
                 startActivity(intent);
             }
         });
@@ -63,16 +86,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-   /* public void Login (View view){
-        Intent login = new Intent(LoginActivity.this,HomeActivity.class);
-        startActivity(login);
-    }
-
-    public void reset (View view){
-        Intent reset = new Intent(LoginActivity.this,ResetpwActivity.class);
-        startActivity(reset);
-    }*/
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -82,9 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -93,5 +104,92 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public class JSONTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+
+                id=id_edit.getText().toString();
+                pw=pw_edit.getText().toString();
+
+                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
+                JSONObject jsonObject = new JSONObject();
+
+                jsonObject.accumulate("id",id);
+                jsonObject.accumulate("pw",pw);
+
+                //accumulate이거 뒤에가 데이터 전송하는거라 여기서 TEXTVIEW 로그인 뷰 긁어오면 데이터 전송은 가능 근데 전송한 데이터를 db로 넣어야할듯
+                HttpURLConnection con = null;
+                BufferedReader reader = null;
+                try {
+                    URL url = new URL(urls[0]);
+                    //연결을 함
+                    con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("POST");//POST방식으로 보냄
+                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
+                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
+                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
+                    con.setDoOutput(true);//Outstream으로 post 데이터를 넘겨주겠다는 의미
+                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
+                    con.connect();
+                    //서버로 보내기위해서 스트림 만듬
+                    OutputStream outStream = con.getOutputStream();
+                    //버퍼를 생성하고 넣음
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
+                    writer.write(jsonObject.toString());
+                    writer.flush();
+                    writer.close();//버퍼를 받아줌
+
+                    //서버로 부터 데이터를 받음
+                    InputStream stream = con.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(stream));
+                    StringBuffer buffer = new StringBuffer();
+                    String line = "";
+                    while ((line = reader.readLine()) != null) {
+                        buffer.append(line);
+                    }
+                    String json_add = buffer.substring(0,buffer.length());
+                    jarray = new JSONArray(json_add);
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    JSONObject obj = jarray.getJSONObject(0);
+
+                    //ImageView[] imageViewList = new ImageView[]{fl};
+                    map.put("id",obj.getString("id")); //93~99까지는 id값을 정확히 파싱하기 위해 하는 작업
+
+                    success_message = map.get("id");// id값을 find_id에 넣는다
+
+                    System.out.println(success_message);
+                    return success_message;//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (con != null) {
+                        con.disconnect();
+                    }
+                    try {
+                        if (reader != null) {
+                            reader.close();//버퍼를 닫아줌
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if(success_message.equals("sign_success")){
+                System.out.println("성공");
+            }
+        }
     }
 }

@@ -22,7 +22,7 @@ public class ListViewAdapter extends BaseAdapter {
     ImageLoader imageLoader;
 
     public ListViewAdapter(Context context,
-                           ArrayList<HashMap<String, String>> arraylist) {
+                           ArrayList<HashMap<String, String>> arraylist) { //TimeLine에서 보내주는 값 저장
         this.context = context;
         data = arraylist;
         imageLoader = new ImageLoader(context);
@@ -30,7 +30,7 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getCount() { //listview 출력되는 값을 위한 설정값
         return data.size();
     }
 
@@ -44,6 +44,7 @@ public class ListViewAdapter extends BaseAdapter {
         return 0;
     }
 
+    @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // Declare Variables
         TextView title;
@@ -51,56 +52,48 @@ public class ListViewAdapter extends BaseAdapter {
         TextView time;
         TextView hash_tag;
         TextView content;
-        TextView no;
+
         ArrayList<Integer> board_no = new ArrayList<>();
         ImageView image;
 
         inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE); //View를 직접사용하기위한 LayoutInflater 사용
 
-        View itemView = inflater.inflate(R.layout.listview_item, parent, false);
-        // Get the position from the results
+        View itemView = inflater.inflate(R.layout.timeline_item, parent, false); //ListView 를위한 View 생성
+
         HashMap<String, String> resultp = new HashMap<String, String>();
-        resultp = data.get(position);
+        resultp = data.get(position); //timeline에서 받은 값 저장
 
-        // Locate the TextViews in listview_item.xml
+
         title = (TextView) itemView.findViewById(R.id.title);
         writer = (TextView) itemView.findViewById(R.id.writer);
         time = (TextView) itemView.findViewById(R.id.time);
         hash_tag = (TextView) itemView.findViewById(R.id.hashtag);
         content = (TextView) itemView.findViewById(R.id.content);
-        // Locate the ImageView in listview_item.xml
+
         image = (ImageView) itemView.findViewById(R.id.image);
-        for(int count=0; count<=position;count++){
-            board_no.add(position);
-        }
 
 
+        title.setText(resultp.get(TimeLine.TITLE));
+        writer.setText(resultp.get(TimeLine.WRITER));
+        time.setText(resultp.get(TimeLine.TIME));
+        hash_tag.setText(resultp.get(TimeLine.HASH_TAG));
+        content.setText(resultp.get(TimeLine.CONTENT));// 디자인 세팅
 
-
-        // Capture position and set results to the TextViews
-        title.setText(resultp.get(TimeLine_test.TITLE));
-        writer.setText(resultp.get(TimeLine_test.WRITER));
-        time.setText(resultp.get(TimeLine_test.TIME));
-        hash_tag.setText(resultp.get(TimeLine_test.HASH_TAG));
-        content.setText(resultp.get(TimeLine_test.CONTENT));
-        // Capture position and set results to the ImageView
-        // Passes flag images URL into ImageLoader.class to download and cache
-        // images
-        imageLoader.DisplayImage(resultp.get(TimeLine_test.IMAGE), image);
+        imageLoader.DisplayImage(resultp.get(TimeLine.IMAGE), image); //imageLoader에 있는 displayimage를 사용하여 이미지 사용
         // Capture button clicks on ListView items
         itemView.setOnClickListener(new OnClickListener() {
             HashMap<String, String> single_resultp = new HashMap<String, String>();
             @Override
-            public void onClick(View arg0) {
+            public void onClick(View arg0) {//댓글을 사용하기 위한 onclick 뷰 사용
                 // Get the position from the results
 
                 //single_resultp = new ArrayList<HashMap<String, String>>();
-                single_resultp = data.get(position);
+                single_resultp = data.get(position); //해당하는 글의 댓글을 보기위한 (ex.순서번호)position 사용
                 // Send single item click data to SingleItemView Class
                 Intent intent = new Intent(context, SingleItemView.class);
                 // Pass all data rank
-                intent.putExtra("no",single_resultp.get(TimeLine_test.NO));
+                intent.putExtra("no",single_resultp.get(TimeLine.NO));
                 // Pass all data country
                 //intent.putExtra("writer", single_resultp.get(TimeLine_test.WRITER));
                 // Pass all data population

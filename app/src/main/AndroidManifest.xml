@@ -16,11 +16,9 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!--이미지 업로드 퍼미션-->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
 
     <application
@@ -33,30 +31,29 @@
 
         <!-- 구글지도 -->
         <meta-data
-          android:name="com.google.android.geo.API_KEY"
-          android:value="AIzaSyDl51o1oNDyv5urTP7ItU41XDuM8pez3gU"/>
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDl51o1oNDyv5urTP7ItU41XDuM8pez3gU"/>
 
         <uses-library
-          android:name="org.apache.http.legacy"
-          android:required="false" />
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
-        <activity android:name=".create_board" />
-        <activity android:name=".Multer" />
-        <activity android:name=".test_node_js" />
-        <activity android:name=".GetImageActivity" />
-        <activity android:name=".NodeJs_Image_Test" />
-        <activity android:name=".TimeLine_test"/>
+        <activity android:name=".TimeLine"/>
         <activity android:name=".SingleItemView"/>
-        <activity android:name=".MainActivity">
+        <activity android:name=".AuthActivity"/>
+        <activity android:name=".FindidActivity"/>
+        <activity android:name=".HomeActivity"/>
+        <activity android:name=".MapsActivity"/>
+        <activity android:name=".ResetpwActivity"/>
+        <activity android:name=".SignActivity"/>
+        <activity android:name=".CreateBoardActivity"/>
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-          android:name=".MapsActivity"
-          android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>

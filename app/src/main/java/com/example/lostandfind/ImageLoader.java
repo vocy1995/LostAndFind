@@ -1,4 +1,4 @@
-package com.example.loatandfind;
+package com.example.lostandfind;
 
 import java.io.File;
 import java.io.FileInputStream;
