@@ -18,7 +18,7 @@ android:layout_height="match_parent">
         android:textSize="20dp"
         android:padding="10dp"
         android:textStyle="bold"
-        android:text="Email Authentication" />
+        android:text="이메일 인증" />
 
     //레이아웃 명칭
     <TextView
@@ -45,7 +45,33 @@ android:layout_height="match_parent">
         android:paddingLeft="10dp"
         />
 
-    // 인증전호 재전송 버튼
+    //제한시간 인증
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textview_emailAUth_time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="60dp"
+            android:gravity="center"
+            android:textColor="	#DC143C"
+            android:text="시간내에 인증번호를 입력하세요." />
+
+        <TextView
+            android:id="@+id/emailAuth_time_counter"
+            android:layout_width="81dp"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:text="3:00"
+            android:textColor="	#DC143C"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    //이메일 재전송 버튼
     <Button
         android:id="@+id/btn_email_resend"
         android:layout_width="280dp"

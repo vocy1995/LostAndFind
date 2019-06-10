@@ -64,7 +64,7 @@ public class SignActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }else{  //사용자가 email을 입력하고 send버튼을 누르면 서버로 전송
                     Toast.makeText(getApplicationContext(), "인증번호를 전송했습니다", Toast.LENGTH_SHORT).show();
-                    new SignActivity.EmailJSONTask().execute("http://172.30.1.15:3000/sendEmail");
+                    new SignActivity.EmailJSONTask().execute("http://192.168.0.7:3000/sendEmail");
                 }
             }
         });
@@ -74,13 +74,15 @@ public class SignActivity extends AppCompatActivity {
         signup_btn.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {
-                new EmailJSONTask().execute("http://172.30.1.15:3000/test1");
+                new EmailJSONTask().execute("http://192.168.0.7:3000/test1");
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
             }
         });
 
     }
+
+
     //이메일 정보 서버로 값전달
     public class EmailJSONTask extends AsyncTask<String, Void, String> {
         @Override

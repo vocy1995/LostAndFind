@@ -1,11 +1,13 @@
 package com.example.lap2;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -30,19 +32,17 @@ import java.net.URL;
 
 public class AuthActivity extends AppCompatActivity{
 
-    final int randomNum=106254; //테스트할 6자리 인증번호
-
-    TextView authEmail;         // 이메일 입력 텍스트
+    EditText authEmail;         // 이메일 입력 텍스트
     Button authSend;            // 이메일 인증전송 버튼
 
     LayoutInflater emailauth;   // LayoutInflater
     View emailauthLayout;       //layout 을 담을 View
     Dialog emailAuth;          // emailAuth 객체
     EditText emailauth_value;
-    /*카운트 다운 타이머에 관련된 필드*/
 
+    /*카운트 다운 타이머에 관련된 필드*/
     TextView time_counter;   // 시간을 보여줌
-    EditText emailauth_number;  // 인증번호를 입련
+    EditText emailauth_number;  // 인증번호를 입력
     Button emailauth_btn;   // 인증버튼
     CountDownTimer countDownTimer;
     final int MILLISINFUTURE = 300*1000;    // 총시간 (300초=5분)
@@ -50,7 +50,7 @@ public class AuthActivity extends AppCompatActivity{
     private Object dialogLayout;
     private EditText Auth_input;
     private EditText edt_auth_input;
-
+    Intent AuthActivityintent;
     @Override
     protected  void onCreate(Bundle savedInstanceState) {
 
@@ -59,8 +59,9 @@ public class AuthActivity extends AppCompatActivity{
 
         Auth_input = (EditText) findViewById(R.id.textview_sign_email); // 이메일정보
         edt_auth_input = (EditText)findViewById(R.id.edt_auth_input);   //사용자가 입력한 인증정보
+        authSend = (Button) findViewById(R.id.btn_sign_sendemail);
 
-        Intent AuthActivityintent = getIntent(); // 전달받은 데이터 형식에 맞게 받아준다
+        AuthActivityintent = getIntent(); // 전달받은 데이터 형식에 맞게 받아준다
         final String stringData = AuthActivityintent.getExtras().getString("randNum");
         final String stringEmail = AuthActivityintent.getExtras().getString("email");
         System.out.println("이메일 인증에서 인증값 확인하기 : "+stringData);
@@ -93,9 +94,84 @@ public class AuthActivity extends AppCompatActivity{
                     authActivityIntent.putExtra("Key","value"); // 데이터를 저장하고 전달한다.
                     startActivity(authActivityIntent);*/
                 }
+
+                switch (view) {
+
+                    case R.id.btnSend:
+
+                        emailauth = LayoutInflater.from(this);
+                        emailauthLayout = emailauth.inflate(R.layout.email_autth, null); // LayoutInflater를 통해 XML에 정의된 Resource들을 View의 형태로 반환 시켜 줌
+                        emailAuth = new Dialog(this); //Dialog 객체 생성
+                        emailAuth.setContentView(emailauthLayout); //Dialog에 inflate한 View를 탑재 하여줌
+                        emailAuth.setCanceledOnTouchOutside(false); //Dialog 바깥 부분을 선택해도 닫히지 않게 설정함.
+                        emailAuth.setOnCancelListener(); //다이얼로그를 닫을 때 일어날 일을 정의하기 위해 onCancelListener 설정
+                        emailAuth.show(); //Dialog를 나타내어 준다.
+                        countDownTimer();
+                        break;
+
+                    case R.id.btn_email_auth : //다이얼로그 내의 인증번호 인증 버튼을 눌렀을 시
+                        emailauth_number = (EditText) findViewById(R.id.edt_auth_input);
+                        String emailauth_number_text =  emailauth_number.getText().toString();
+                        AuthActivityintent = getIntent(); //인텐드해서 받아온 값의 객체 선언
+                        String randomAuth_intent = AuthActivityintent.getExtras().getString("randNum");
+                        if(emailauth_number_text.equals(randomAuth_intent)){
+                            Toast.makeText(this, "이메일 인증 성공", Toast.LENGTH_SHORT).show();
+                        }else{
+
+                            Toast.makeText(this, "이메일 인증 실패", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                }
+
             }
         });
     }
+
+    public void countDownTimer() { //카운트 다운 메소드
+
+        time_counter = (TextView) findViewById(R.id.emailAuth_time_counter);
+        //줄어드는 시간을 나타내는 TextView
+        emailauth_number = (EditText) findViewById(R.id.edt_auth_input);
+        //사용자 인증 번호 입력창
+        emailauth_btn = (Button) findViewById(R.id.btn_email_auth);
+        //인증하기 버튼
+
+
+        countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
+            @Override
+            public void onTick(long millisUntilFinished) { //(300초에서 1초 마다 계속 줄어듬)
+
+                long emailAuthCount = millisUntilFinished / 1000;
+                Log.d("Alex", emailAuthCount + "");
+
+                if ((emailAuthCount - ((emailAuthCount / 60) * 60)) >= 10) { //초가 10보다 크면 그냥 출력
+                    time_counter.setText((emailAuthCount / 60) + " : " + (emailAuthCount - ((emailAuthCount / 60) * 60)));
+                } else { //초가 10보다 작으면 앞에 '0' 붙여서 같이 출력. ex) 02,03,04...
+                    time_counter.setText((emailAuthCount / 60) + " : 0" + (emailAuthCount - ((emailAuthCount / 60) * 60)));
+                }
+
+                //emailAuthCount은 종료까지 남은 시간임. 1분 = 60초 되므로,
+                // 분을 나타내기 위해서는 종료까지 남은 총 시간에 60을 나눠주면 그 몫이 분이 된다.
+                // 분을 제외하고 남은 초를 나타내기 위해서는, (총 남은 시간 - (분*60) = 남은 초) 로 하면 된다.
+
+            }
+
+
+            @Override
+            public void onFinish() { //시간이 다 되면 다이얼로그 종료
+
+                emailAuth.cancel();
+
+            }
+        }.start();
+
+        emailauth_btn.setOnClickListener((View.OnClickListener) this);
+    }
+
+
+    public void onCancel(DialogInterface emailauth) {
+        countDownTimer.cancel();
+    } //다이얼로그 닫을 때 카운트 다운 타이머의 cancel()메소드 호출
 
     //이메일 정보 서버로 값전달
     public class EmailJSONTask_2 extends AsyncTask<String, Void, String> {
