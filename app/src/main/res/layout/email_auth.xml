@@ -8,7 +8,7 @@ android:orientation="vertical"
 android:layout_width="match_parent"
 android:layout_height="match_parent">
 
-    //이메일 인증
+    // 상단바 명칭
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
@@ -20,60 +20,44 @@ android:layout_height="match_parent">
         android:textStyle="bold"
         android:text="Email Authentication" />
 
-    //이메일 인증 텍스트
+    //레이아웃 명칭
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="70dp"
-        android:text="이메일 인증"
+        android:hint="이메일 인증"
         android:textSize="25dp"
         android:textStyle="bold"
         android:gravity="center"
         />
 
     //인증번호 입력
-    <TextView
-        android:id="@+id/textview_auth_input"
+    <EditText
+        android:id="@+id/edt_auth_input"
         android:layout_width="280dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_marginTop="25dp"
         android:background="@drawable/textview_edge"
-        android:text="인증번호를 입력하세요"
+        android:hint="인증번호를 입력하세요"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
         />
 
-    // 인증 설명 + 제한시간 레이아웃
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal">
+    // 인증전호 재전송 버튼
+    <Button
+        android:id="@+id/btn_email_resend"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="#A9A9F5"
+        android:stateListAnimator="@null"
+        android:text="재전송"
+        android:textSize="15dp" />
 
-        // 인증설명
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="223dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_marginLeft="50dp"
-            android:text="전송된 인증번호를 5분 이내에 입력하세요."
-            android:textColor="#CD5C5C"
-            android:textSize="10dp" />
-
-        // 인증 제한시간
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="5:00"
-            android:textSize="15dp"
-            android:textColor="#CD5C5C" />
-    </LinearLayout>
-
-    // 인증버튼
+    // 인증 완료 버튼
     <Button
         android:id="@+id/btn_email_auth"
         android:layout_width="280dp"
@@ -83,7 +67,7 @@ android:layout_height="match_parent">
         android:layout_marginBottom="30dp"
         android:background="#A9A9F5"
         android:stateListAnimator="@null"
-        android:text="Authentication"
+        android:text="인증 완료"
         android:textSize="15dp" />
 
 </LinearLayout>

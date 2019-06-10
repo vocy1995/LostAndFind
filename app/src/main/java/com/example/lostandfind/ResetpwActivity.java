@@ -1,8 +1,8 @@
 package com.example.lap2;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+        import android.os.Bundle;
+        import android.support.v7.app.AppCompatActivity;
+        import android.view.View;
 
 public class ResetpwActivity extends AppCompatActivity {
     @Override
