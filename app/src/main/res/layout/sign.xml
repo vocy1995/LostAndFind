@@ -49,6 +49,7 @@
         android:orientation="horizontal">
 
         //이메일 입력
+
         <EditText
             android:id="@+id/textview_sign_email"
             android:layout_width="220dp"
@@ -79,7 +80,7 @@
         android:layout_marginTop="10dp">
 
         //아이디 입력
-        <TextView
+        <EditText
             android:id="@+id/textview_sign_id"
             android:layout_width="220dp"
             android:layout_height="match_parent"
@@ -87,7 +88,7 @@
             android:layout_marginRight="15dp"
             android:layout_marginLeft="45dp"
             android:background="@drawable/textview_edge"
-            android:text="ID"
+            android:hint="ID"
             android:textSize="15dp"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"/>
@@ -114,7 +115,7 @@
         android:layout_marginTop="10dp">
 
         //패스워드 입력
-        <TextView
+        <EditText
             android:id="@+id/textview_sign_pw"
             android:layout_width="220dp"
             android:layout_height="match_parent"
@@ -122,10 +123,11 @@
             android:layout_marginRight="15dp"
             android:layout_marginLeft="45dp"
             android:background="@drawable/textview_edge"
-            android:text="PW"
+            android:hint="PW"
             android:textSize="15dp"
             android:gravity="center_vertical"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:password="true"/>
 
     </LinearLayout>
 
@@ -137,7 +139,7 @@
         android:layout_marginTop="10dp">
 
         //패스워드 재입력
-        <TextView
+        <EditText
             android:id="@+id/textview_sign_repeatpw"
             android:layout_width="220dp"
             android:layout_height="match_parent"
@@ -145,10 +147,11 @@
             android:layout_marginRight="15dp"
             android:layout_marginLeft="45dp"
             android:background="@drawable/textview_edge"
-            android:text="Repeat PW"
+            android:hint="Repeat PW"
             android:textSize="15dp"
             android:gravity="center_vertical"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:password="true"/>
 
         // 동일 여부 체크 표시
         <ImageView

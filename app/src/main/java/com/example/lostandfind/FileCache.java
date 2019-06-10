@@ -1,4 +1,4 @@
-package com.example.loatandfind;
+package com.example.lostandfind;
 
 import java.io.File;
 import android.content.Context;
@@ -10,7 +10,7 @@ public class FileCache {
     public FileCache(Context context) {
         // Find the dir to save cached images
         if (android.os.Environment.getExternalStorageState().equals(
-                android.os.Environment.MEDIA_MOUNTED))
+                android.os.Environment.MEDIA_MOUNTED)) //sd카드 사용여부
             cacheDir = new File(
                     android.os.Environment.getExternalStorageDirectory(),
                     "JsonParseTutorialCache");

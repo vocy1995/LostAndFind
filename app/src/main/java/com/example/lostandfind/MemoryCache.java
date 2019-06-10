@@ -1,4 +1,4 @@
-package com.example.loatandfind;
+package com.example.lostandfind;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -14,13 +14,13 @@ public class MemoryCache {
 
     // Last argument true for LRU ordering
     private Map<String, Bitmap> cache = Collections
-            .synchronizedMap(new LinkedHashMap<String, Bitmap>(10, 1.5f, true));
+            .synchronizedMap(new LinkedHashMap<String, Bitmap>(10, 1.5f, true)); //자료를 편하게 사용하기위함
 
     // Current allocated size
     private long size = 0;
 
     // Max memory in bytes
-    private long limit = 1000000;
+    private long limit = 1000000; //최대값
 
     public MemoryCache() {
         // Use 25% of available heap size
@@ -28,7 +28,7 @@ public class MemoryCache {
     }
 
     public void setLimit(long new_limit) {
-        limit = new_limit;
+        limit = new_limit; //최대값 설정
         Log.i(TAG, "MemoryCache will use up to " + limit / 1024. / 1024. + "MB");
     }
 
@@ -55,7 +55,7 @@ public class MemoryCache {
         }
     }
 
-    private void checkSize() {
+    private void checkSize() { //사이즈 확인용도
         Log.i(TAG, "cache size=" + size + " length=" + cache.size());
         if (size > limit) {
             // Least recently accessed item will be the first one iterated

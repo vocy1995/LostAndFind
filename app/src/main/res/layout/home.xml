@@ -11,7 +11,7 @@
         android:layout_marginTop="200dp">
 
         //아이디 입력
-        <TextView
+        <EditText
             android:id="@+id/textview_search"
             android:layout_width="250dp"
             android:layout_height="match_parent"
@@ -20,6 +20,8 @@
             android:background="@drawable/textview_edge"
             android:textSize="15dp"
             android:gravity="center_vertical"
+            android:padding="5dp"
+            android:hint="검색어를 입력하세요"
             android:paddingLeft="10dp"/>
 
         // 중복확인

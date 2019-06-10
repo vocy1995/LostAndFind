@@ -1,10 +1,10 @@
-package com.example.loatandfind;
+package com.example.lostandfind;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Utils {
-    public static void CopyStream(InputStream is, OutputStream os)
+    public static void CopyStream(InputStream is, OutputStream os) //이미지 사용을 위한 클래스
     {
         final int buffer_size=1024;
         try

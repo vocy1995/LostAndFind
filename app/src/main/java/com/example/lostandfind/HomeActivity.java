@@ -1,4 +1,4 @@
-package com.example.lap2;
+package com.example.lostandfind;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +9,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // 부모를 받는다.
         setContentView(R.layout.home);      // 어떤 레이아웃을 가리키는가.
-
 
     }
 }

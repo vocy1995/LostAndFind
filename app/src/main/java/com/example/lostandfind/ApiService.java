@@ -1,4 +1,4 @@
-package com.example.loatandfind;
+package com.example.lostandfind;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -10,6 +10,6 @@ import retrofit2.http.Part;
 
 public interface ApiService {
     @Multipart
-    @POST("/upload")
-    Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Part("upload") RequestBody name);
+    @POST("/upload_image")
+    Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Part("upload_image") RequestBody name);
 }
