@@ -4,7 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/jjung.js');
+var jjungRouter = require('./routes/jjung.js');
+var kungRouter = require('./routes/kung.js');
+var horangRouter = require('./routes/horang.js');
 
 var app = express();
 
@@ -18,7 +20,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/', jjungRouter);
+app.use('/', kungRouter);
+app.use('/', horangRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

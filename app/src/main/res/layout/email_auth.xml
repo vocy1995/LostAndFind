@@ -62,12 +62,12 @@ android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/emailAuth_time_counter"
-            android:layout_width="81dp"
+            android:layout_width="67dp"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
             android:layout_marginLeft="10dp"
+            android:gravity="center_horizontal"
             android:text="3:00"
-            android:textColor="	#DC143C"
+            android:textColor="#DC143C"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -81,7 +81,8 @@ android:layout_height="match_parent">
         android:background="#A9A9F5"
         android:stateListAnimator="@null"
         android:text="재전송"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+        android:visibility="invisible"/>
 
     // 인증 완료 버튼
     <Button

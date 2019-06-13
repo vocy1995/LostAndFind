@@ -21,6 +21,7 @@
         android:textStyle="bold"
         android:text="Sign Up" />
 
+<<<<<<< HEAD
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -47,6 +48,36 @@
         android:layout_height="40dp"
         android:layout_marginTop="15dp"
         android:orientation="horizontal">
+=======
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="100dp">
+
+        <EditText
+            android:id="@+id/textview_sign_name"
+            android:layout_width="220dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="45dp"
+            android:background="@drawable/textview_edge"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:hint="NAME"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+    // 이메일 레이아웃
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+        //이메일 입력
+>>>>>>> 2e98d61cfb01ae86697a09605030df4031394179
 
         //이메일 입력
         <EditText

@@ -44,7 +44,6 @@
         <activity android:name=".FindidActivity"/>
         <activity android:name=".HomeActivity"/>
         <activity android:name=".MapsActivity"/>
-        <activity android:name=".ResetpwActivity"/>
         <activity android:name=".SignActivity"/>
         <activity android:name=".CreateBoardActivity"/>
         <activity android:name=".LoginActivity">
