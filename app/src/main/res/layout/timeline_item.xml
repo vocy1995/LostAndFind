@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
@@ -7,7 +8,6 @@
         android:id="@+id/titlelabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         />
 
     <TextView
@@ -15,8 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/titlelabel"
-
-        android:layout_marginTop="15dp"
         android:textColor="#ff000000"
         android:textSize="24sp"/>
 
@@ -24,27 +22,35 @@
         android:id="@+id/writerlabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/image"
-        android:layout_marginTop="8dp"
-        />
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="216dp"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/title"
-        android:scaleType="fitXY" />
+        />
 
     <TextView
         android:id="@+id/writer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/image"
+        android:layout_below="@+id/title"
         android:layout_marginTop="8dp"
         android:layout_toRightOf="@+id/writerlabel"
         android:textColor="	#808080"/>
+
+    <TextView
+        android:id="@+id/timelabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+
+        />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_marginLeft="270dp"
+        android:textSize="10sp"
+        android:layout_toRightOf="@+id/timelabel"
+        android:textColor="	#808080" />
 
     <TextView
         android:id="@+id/contentlabel"
@@ -64,71 +70,83 @@
         />
 
 
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="216dp"
+
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/content"
+        android:scaleType="fitXY"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/hashtag_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/content"
+        android:layout_below="@+id/image"
         android:layout_marginTop="8dp"
         />
     <TextView
         android:id="@+id/hashtag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/content"
+        android:layout_below="@+id/image"
         android:layout_marginTop="8dp"
         android:layout_toRightOf="@+id/hashtag_label"
-        android:textColor="#ff000000"
+        android:textColor="#ff000000"/>
 
-        />
 
     <TextView
-        android:id="@+id/timelabel"
+        android:id="@+id/commentlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hashtag"
+        />
+
+    <ImageView
+        android:id="@+id/comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hashtag"
+        android:layout_marginLeft="370dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_chat_black_24dp" />
+
+    <TextView
+        android:id="@+id/longitude_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/hashtag_label"
         android:layout_marginTop="8dp"
         />
+    <TextView
+        android:id="@+id/longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hashtag"
+        android:layout_marginTop="8dp"
+        android:textSize="10sp"
+        android:layout_toRightOf="@+id/longitude_label"
+        android:textColor="	#808080"/>
 
     <TextView
-        android:id="@+id/time"
+        android:id="@+id/latitude_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/content"
-        android:layout_marginLeft="318dp"
-        android:layout_marginTop="33dp"
-        android:layout_toRightOf="@+id/timelabel"
-        android:textColor="	#808080" />
-    <TextView
-        android:id="@+id/commentlabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timelabel"
+        android:layout_below="@+id/hashtag_label"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="8dp"
         />
-
     <TextView
-        android:id="@+id/comment"
+        android:id="@+id/latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/timelabel"
-        android:layout_marginLeft="318dp"
-        android:layout_marginTop="20dp"
-        android:layout_toRightOf="@+id/commentlabel"
-        android:background="@android:color/transparent"
-        android:text="Comments" />
-
-    <TextView
-        android:id="@+id/comments_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/comment"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/comment"
-        android:text="10"
-        android:layout_marginTop="-18dp"
-        android:background="@android:color/transparent"
-        />
+        android:layout_below="@+id/hashtag"
+        android:layout_marginTop="8dp"
+        android:textSize="10sp"
+        android:layout_toRightOf="@+id/latitude_label"
+        android:textColor="	#808080"/>
 
 </RelativeLayout>

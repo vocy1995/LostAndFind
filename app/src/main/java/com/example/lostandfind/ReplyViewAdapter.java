@@ -58,8 +58,8 @@ public class ReplyViewAdapter extends BaseAdapter {
         board_content = (TextView) itemView.findViewById(R.id.comment);
 
 
-        board_writer.setText(resultp.get(SingleItemView.BOARD_WRITER));
-        board_content.setText(resultp.get(SingleItemView.BOARD_CONTENT)); //해당하는값 출력
+        board_writer.setText(resultp.get(ReplyView.WRITER));
+        board_content.setText(resultp.get(ReplyView.CONTENT)); //해당하는값 출력
 
         return itemView;
     }

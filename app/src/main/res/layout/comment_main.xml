@@ -28,12 +28,14 @@
         android:layout_width="44dp"
         android:layout_height="37dp"
         android:layout_alignBottom="@id/listview_reply"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="19dp"
+        android:layout_marginEnd="19dp"
         android:layout_toRightOf="@id/add_comment"
         android:gravity="center_horizontal"
         android:text="POST"
-        android:textColor="#ff000000"/>
+        android:textColor="#ff000000"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="19dp" />
 
 </RelativeLayout>

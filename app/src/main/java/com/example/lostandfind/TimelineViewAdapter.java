@@ -13,20 +13,21 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ListViewAdapter extends BaseAdapter {
+public class TimelineViewAdapter extends BaseAdapter {
 
     // Declare Variables
     Context context;
     LayoutInflater inflater;
     ArrayList<HashMap<String, String>> data;
     ImageLoader imageLoader;
-
-    public ListViewAdapter(Context context,
-                           ArrayList<HashMap<String, String>> arraylist) { //TimeLine에서 보내주는 값 저장
+    String get_id;
+    public TimelineViewAdapter(Context context,
+                               ArrayList<HashMap<String, String>> arraylist,String id_get) { //TimeLine에서 보내주는 값 저장
         this.context = context;
         data = arraylist;
         imageLoader = new ImageLoader(context);
-
+        get_id = id_get;
+        System.out.println("timeline_id_get : "+ get_id);
     }
 
     @Override
@@ -52,9 +53,11 @@ public class ListViewAdapter extends BaseAdapter {
         TextView time;
         TextView hash_tag;
         TextView content;
-
+        TextView longitude;
+        TextView latitude;
         ArrayList<Integer> board_no = new ArrayList<>();
         ImageView image;
+        ImageView comment;
 
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE); //View를 직접사용하기위한 LayoutInflater 사용
@@ -70,37 +73,32 @@ public class ListViewAdapter extends BaseAdapter {
         time = (TextView) itemView.findViewById(R.id.time);
         hash_tag = (TextView) itemView.findViewById(R.id.hashtag);
         content = (TextView) itemView.findViewById(R.id.content);
-
+        longitude = (TextView) itemView.findViewById(R.id.longitude);
+        latitude = (TextView) itemView.findViewById(R.id.latitude);
         image = (ImageView) itemView.findViewById(R.id.image);
-
+        comment = (ImageView)itemView.findViewById(R.id.comment);
 
         title.setText(resultp.get(TimeLine.TITLE));
         writer.setText(resultp.get(TimeLine.WRITER));
         time.setText(resultp.get(TimeLine.TIME));
         hash_tag.setText(resultp.get(TimeLine.HASH_TAG));
         content.setText(resultp.get(TimeLine.CONTENT));// 디자인 세팅
+        longitude.setText(resultp.get(TimeLine.LONGITUDE));
+        latitude.setText(resultp.get(TimeLine.LATITUDE));
 
-        imageLoader.DisplayImage(resultp.get(TimeLine.IMAGE), image); //imageLoader에 있는 displayimage를 사용하여 이미지 사용
+        imageLoader.DisplayImage(resultp.get(TimeLine.IMAGE_URL), image); //imageLoader에 있는 displayimage를 사용하여 이미지 사용
         // Capture button clicks on ListView items
-        itemView.setOnClickListener(new OnClickListener() {
+        comment.setOnClickListener(new OnClickListener() {
             HashMap<String, String> single_resultp = new HashMap<String, String>();
             @Override
             public void onClick(View arg0) {//댓글을 사용하기 위한 onclick 뷰 사용
-                // Get the position from the results
 
-                //single_resultp = new ArrayList<HashMap<String, String>>();
-                single_resultp = data.get(position); //해당하는 글의 댓글을 보기위한 (ex.순서번호)position 사용
-                // Send single item click data to SingleItemView Class
-                Intent intent = new Intent(context, SingleItemView.class);
-                // Pass all data rank
+                single_resultp = data.get(position);
+
+                Intent intent = new Intent(context, ReplyView.class);
+
                 intent.putExtra("no",single_resultp.get(TimeLine.NO));
-                // Pass all data country
-                //intent.putExtra("writer", single_resultp.get(TimeLine_test.WRITER));
-                // Pass all data population
-
-                // Pass all data flag
-
-                // Start SingleItemView Class
+                intent.putExtra("id",get_id);
                 context.startActivity(intent);
 
             }

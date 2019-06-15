@@ -1,5 +1,6 @@
 package com.example.lostandfind;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,19 +21,24 @@ public class TimeLine extends AppCompatActivity {
     static String TITLE = "title";
     static String WRITER = "writer";
     static String TIME = "time";
-    static String IMAGE = "image";
+    static String IMAGE_URL = "img_url";
     static String CONTENT = "content";
     static String NO = "no";
     static String HASH_TAG = "hash_tag";
-
+    static String LONGITUDE ="longitude";
+    static String LATITUDE ="latitude";
     ListView listview;
-    ListViewAdapter adapter;
-
+    TimelineViewAdapter adapter;
+    String id_get;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LoginActivity a = new LoginActivity();
+        Intent get = getIntent();
+        id_get=get.getStringExtra("id");
+        System.out.println("id_test_get: "+ id_get);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.timeline_main);
-        Timeline_getJSON("http://192.168.0.116:3000/post");
+        Timeline_getJSON("http://192.168.60.54:3000/timeline");
 
     }
 
@@ -58,11 +64,9 @@ public class TimeLine extends AppCompatActivity {
                 }else{
                 }
             }
-
             @Override
             protected String doInBackground(Void... voids) {
                 try {
-
                     URL url = new URL(urlWebService);
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();//url서비스 사용을 위한것
                     con.setRequestMethod("POST");
@@ -95,18 +99,21 @@ public class TimeLine extends AppCompatActivity {
             JSONObject obj = jsonArray.getJSONObject(i);
 
             map.put("title", obj.getString("title"));
-            map.put("writer", obj.getString("writer"));
+            map.put("type_question", obj.getString("type_question"));
             map.put("time", obj.getString("time"));
-            map.put("image", obj.getString("image"));
+            map.put("img_url", obj.getString("img_url"));
             map.put("hash_tag",obj.getString("hash_tag"));
             map.put("content",obj.getString("content"));
             map.put("no",obj.getString("no")); //서버에서 보내주는 값을 저장
+            map.put("longitude",obj.getString("longitude"));
+            map.put("latitude",obj.getString("latitude"));
+            //map.put("board_writer",obj.getString("board_writer"));
             System.out.println("map : " +map);
             arraylist.add(map); //arraylist 에 hashmap을 넣어줌으로써 arraylist에서 ㅂ구분짓게 함
             System.out.println("\n arraylisttest : " + arraylist);
         }
         listview = (ListView) findViewById(R.id.listview);
-        adapter = new ListViewAdapter(TimeLine.this, arraylist); //listview를 실행시킬곳에 필요한 arraylist 전송
+        adapter = new TimelineViewAdapter(TimeLine.this, arraylist,id_get); //listview를 실행시킬곳에 필요한 arraylist 전송;
         listview.setAdapter(adapter);
     }
 

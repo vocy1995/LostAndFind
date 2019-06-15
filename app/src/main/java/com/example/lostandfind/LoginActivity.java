@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,8 +29,11 @@ import java.util.HashMap;
 public class LoginActivity extends AppCompatActivity {
 
     EditText id_edit,pw_edit;
-    String id,pw;
+    String id;
+    String pw;
     String success_message;
+
+    String id_post;
     JSONArray jarray; //parse를 위한 jarray 사용
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +61,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), TimeLine.class);
-                startActivity(intent);
+                new Login().execute("http://192.168.60.54:3000/login");
+
             }
         });
 
@@ -105,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    public class JSONTask extends AsyncTask<String, Void, String> {
+    public class Login extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... urls) {
@@ -150,17 +154,8 @@ public class LoginActivity extends AppCompatActivity {
                     while ((line = reader.readLine()) != null) {
                         buffer.append(line);
                     }
-                    String json_add = buffer.substring(0,buffer.length());
-                    jarray = new JSONArray(json_add);
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    JSONObject obj = jarray.getJSONObject(0);
-
-                    //ImageView[] imageViewList = new ImageView[]{fl};
-                    map.put("id",obj.getString("id")); //93~99까지는 id값을 정확히 파싱하기 위해 하는 작업
-
-                    success_message = map.get("id");// id값을 find_id에 넣는다
-
-                    System.out.println(success_message);
+                    System.out.println(buffer.toString());
+                    success_message = buffer.toString();
                     return success_message;//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
 
                 } catch (MalformedURLException e) {
@@ -187,9 +182,15 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            if(success_message.equals("sign_success")){
-                System.out.println("성공");
-            }
+            /*if(success_message.equals("success")){
+                Toast.makeText(getApplicationContext(),"로그인에 성공하였습니다", Toast.LENGTH_SHORT).show();
+
+            }else {
+                Toast.makeText(getApplicationContext(), "아이디와 패스워드를 확인하세요", Toast.LENGTH_SHORT).show();
+            }*/
+            Intent intent = new Intent(getApplicationContext(), TimeLine.class);
+            //intent.putExtra("id",id); //댓글 작성시 필요한 id값 전송
+            startActivity(intent);
         }
     }
 }
