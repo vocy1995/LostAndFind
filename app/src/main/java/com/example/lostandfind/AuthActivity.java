@@ -37,7 +37,7 @@ public class AuthActivity extends AppCompatActivity {
     Button authReSend;
 
     CountDownTimer countDownTimer;
-    final int MILLISINFUTURE = 10 * 500; //총 시간 (300초 = 5분)
+    final int MILLISINFUTURE = 10 * 1000; //총 시간 (300초 = 5분)
     final int COUNT_DOWN_INTERVAL = 1000; //onTick 메소드를 호출할 간격 (1초)
 
     LayoutInflater dialog;   // LayoutInflater
@@ -57,7 +57,7 @@ public class AuthActivity extends AppCompatActivity {
         authSend = (Button) findViewById(R.id.btn_sign_sendemail);
 
         //Activity실행시 인증번호를 전송한다.
-        new EmaileReSendJSONTask().execute("http:///192.168.0.41:3000/sendEmail");
+        new EmaileReSendJSONTask().execute("http://192.168.0.22:3000/sendEmail");
         System.out.println("authRanText : " + authRanText);
         //실행시 인증시간 줄어듬
         countDownTimer();
@@ -72,7 +72,7 @@ public class AuthActivity extends AppCompatActivity {
         authReSend.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new EmaileReSendJSONTask().execute("http:///192.168.0.41:3000/sendEmail");
+                new EmaileReSendJSONTask().execute("http://192.168.0.22:3000/sendEmail");
                 btn_email_auth.setVisibility(View.VISIBLE);
                 authReSend.setVisibility(View.INVISIBLE);
                 countDownTimer();
@@ -82,9 +82,14 @@ public class AuthActivity extends AppCompatActivity {
         btn_email_auth.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //System.out.println(authRanText);
+
                 //사용자 인증 번호 입력창
                 edt_auth_input = (EditText) findViewById(R.id.edt_auth_input);
-                if (edt_auth_input.getText().toString() == authRanText) {
+                String edt_auth_input_text =  '"'+edt_auth_input.getText().toString()+'"';
+                System.out.println(authRanText+": \""+edt_auth_input.getText().toString()+"\" : " + authRanText);
+                boolean num =  authRanText.equals("'"+edt_auth_input.getText().toString()+'"');
+                if ("\""+edt_auth_input.getText().toString()+"\"" == authRanText) {
                     Toast.makeText(getApplicationContext(), "이메일 인증이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                     //0.5초후 뒤로가기
                     new Handler().postDelayed(new Runnable() {
@@ -210,6 +215,7 @@ public class AuthActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             authRanText = result;
+            System.out.println(authRanText);
         }
     }
 }

@@ -37,12 +37,11 @@ router.post('/createBoardText', function(req, res, next) {
   //현재 날짜
   var dt = new Date();
   var time = dt.toFormat('YYYY년 MM월 DD일 HH24시 MI분 SS초');
-
   var countQuery = "select count(*) as count from laf.bullet_board";  //현재 게시글 숫자 확인
   mysql.select(countQuery, function(rows){
     var no = rows[0].count + 1;
-    var insertQuery = "INSERT INTO laf.bullet_board (no, time, title, type_question, latitude, longitude, content, hash_tag)"
-      +"VALUES ('"+no+"', '"+time+"', '"+title+"', '"+typeQuestion+"', '"+latitude+"','"+longitude+"', '"+content+"', '"+hashTag+"');";  //게시글 삽입 Query
+    var insertQuery = "INSERT INTO laf.bullet_board (no, time, title, type_question, latitude, longitude, content, hash_tag, location)"
+      +"VALUES ('"+no+"', '"+time+"', '"+title+"', '"+typeQuestion+"', '"+latitude+"','"+longitude+"', '"+content+"', '"+hashTag+"', '"+location+"');";  //게시글 삽입 Query
     console.log(insertQuery);
     mysql.select(insertQuery, function(rows){});
   });
@@ -69,6 +68,19 @@ router.post('/createBoardImageUpload', multer({storage: storage}).single('upload
   });
 
   res.json({"result":"ok"})
+});
+
+router.post('/selectBulletinNum', function(req, res, next){
+  var city = req.body.city;
+
+
+  var selectQuery = 'select count(*) as count from laf.bullet_board where location like \'%'+city+'%\';';
+  console.log(selectQuery);
+  mysql.select(selectQuery, function(rows){
+    console.log(rows[0].count)
+    var result = rows[0].count;
+    res.send(result.toString());
+  });
 });
 
 module.exports = router;

@@ -78,7 +78,7 @@ public class CreateBoardActivity extends AppCompatActivity {
     private final static int IMAGE_RESULT = 200;
 
     //데이터를 받아올 URL
-    String url = "http://192.168.0.2:3000";
+    String url = "http://192.168.1.3:3000";
 
     //Spinner 객체 및 변수 선언
     Spinner type_question;
