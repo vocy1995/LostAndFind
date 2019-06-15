@@ -1,38 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    // 아이디 레이아웃
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="200dp">
+        android:layout_height="213dp"
+        android:orientation="horizontal">
 
-        //아이디 입력
-        <EditText
-            android:id="@+id/textview_search"
-            android:layout_width="250dp"
-            android:layout_height="match_parent"
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="35dp"
-            android:background="@drawable/textview_edge"
-            android:textSize="15dp"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:hint="검색어를 입력하세요"
-            android:paddingLeft="10dp"/>
+            android:layout_marginLeft="20dp"
+            android:gravity="center_horizontal|bottom"
+            android:hint="이름"
+            android:textStyle="bold" />
 
-        // 중복확인
-        <Button
-            android:id="@+id/btn_search"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/id_check"
-            android:onClick="email_send"
-            android:stateListAnimator="@null"
-            android:text="search"/>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="146dp"
+            android:layout_height="157dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/textview_edge" />
 
     </LinearLayout>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="50dp"
+        android:layout_centerInParent="true"
+        android:background="#E6E6FA"></View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp">
+
+        <Button
+            android:id="@+id/imgBtnCircle_lost"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/ic_circlebtn_lost"
+            android:text="분실물"
+            android:textColor="#FFFFE0"
+            android:textSize="25dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"/>
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="#E6E6FA">></View>
+
+        <Button
+            android:id="@+id/imgBtnCircle_get"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/ic_circlebtn_lost"
+            android:text="습득물"
+            android:textColor="#FFFFE0"
+            android:textSize="25dp"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_centerInParent="true"
+        android:background="#E6E6FA"></View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp">
+
+        <Button
+            android:id="@+id/imgBtnCircle_write"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_circlebtn_lost"
+            android:gravity="center"
+            android:text="글쓰기"
+            android:textColor="#FFFFE0"
+            android:textSize="25dp"/>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="#E6E6FA"></View>
+
+        <Button
+            android:id="@+id/imgBtnCircle_post"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/ic_circlebtn_lost"
+            android:gravity="center"
+            android:text="내가 쓴 글"
+            android:textColor="#FFFFE0"
+            android:textSize="25dp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_centerInParent="true"
+        android:background="#E6E6FA"></View>
+
+
+
 </LinearLayout>
