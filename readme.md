@@ -1,4 +1,4 @@
-# Lost and Found
+# Lost and Find
 ## Description
 분실물과 습득물을 등록하여 사용자들이 쉽게 찾을 수 있다.  
 분실 위치를 지도에 출력하여 보다 좋은 인터페이스를 제공한다.
