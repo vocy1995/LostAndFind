@@ -209,5 +209,3 @@ public class GpsInfo extends Service implements LocationListener {
 
     }
 }
-
-

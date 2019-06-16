@@ -6,49 +6,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#fff">
 
 
     //Sign Up
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:gravity="center|left"
-        android:background="@drawable/edge"
-        android:textSize="20dp"
-        android:padding="10dp"
-        android:textStyle="bold"
-        android:text="Sign Up" />
 
-<<<<<<< HEAD
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="100dp">
-
-        <EditText
-            android:id="@+id/textview_sign_name"
-            android:layout_width="220dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginLeft="45dp"
-            android:background="@drawable/textview_edge"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:hint="이름"
-            android:textSize="15dp" />
-
-    </LinearLayout>
-    // 이메일 레이아웃
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="15dp"
-        android:orientation="horizontal">
-=======
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -77,9 +40,7 @@
         android:orientation="horizontal">
 
         //이메일 입력
->>>>>>> 2e98d61cfb01ae86697a09605030df4031394179
 
-        //이메일 입력
         <EditText
             android:id="@+id/textview_sign_email"
             android:layout_width="220dp"
@@ -90,7 +51,8 @@
             android:background="@drawable/textview_edge"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:hint="E-mail" />
+            android:hint="E-mail"
+            android:textSize="13dp" />
 
         <Button
             android:id="@+id/btn_sign_sendemail"
@@ -110,7 +72,7 @@
         android:layout_marginTop="10dp">
 
         //아이디 입력
-        <TextView
+        <EditText
             android:id="@+id/textview_sign_id"
             android:layout_width="220dp"
             android:layout_height="match_parent"
@@ -118,7 +80,7 @@
             android:layout_marginRight="15dp"
             android:layout_marginLeft="45dp"
             android:background="@drawable/textview_edge"
-            android:text="ID"
+            android:hint="ID"
             android:textSize="15dp"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"/>
@@ -145,7 +107,7 @@
         android:layout_marginTop="10dp">
 
         //패스워드 입력
-        <TextView
+        <EditText
             android:id="@+id/textview_sign_pw"
             android:layout_width="220dp"
             android:layout_height="match_parent"
@@ -153,10 +115,11 @@
             android:layout_marginRight="15dp"
             android:layout_marginLeft="45dp"
             android:background="@drawable/textview_edge"
-            android:text="PW"
+            android:hint="PW"
             android:textSize="15dp"
             android:gravity="center_vertical"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:password="true"/>
 
     </LinearLayout>
 
@@ -168,7 +131,7 @@
         android:layout_marginTop="10dp">
 
         //패스워드 재입력
-        <TextView
+        <EditText
             android:id="@+id/textview_sign_repeatpw"
             android:layout_width="220dp"
             android:layout_height="match_parent"
@@ -176,19 +139,13 @@
             android:layout_marginRight="15dp"
             android:layout_marginLeft="45dp"
             android:background="@drawable/textview_edge"
-            android:text="Repeat PW"
+            android:hint="Repeat PW"
             android:textSize="15dp"
             android:gravity="center_vertical"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:password="true"/>
 
         // 동일 여부 체크 표시
-        <ImageView
-            android:id="@+id/image_sign_checkpw"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/id_check"
-            android:scaleType="fitStart" />
 
 
     </LinearLayout>

@@ -49,11 +49,11 @@ router.post('/sendEmail', function(req, res, next){
   console.log("----------------------------");
 
   var userEmail = req.body.userEmail;
-  
+
   var randNumber = randNum();
   console.log(userEmail);
   console.log(randNumber);
-  
+
   var pw = "pw를 선언을 해야지이이이ㅠㅠㅠㅠㅠㄴ";
 
   var transporter = nodemailer.createTransport({
@@ -69,15 +69,15 @@ router.post('/sendEmail', function(req, res, next){
     to: userEmail,                      // 수신 메일 주소
     subject: 'Sending Email using Node.js',   // 제목
     //text: 'That was easy',           // 내용
-    html: '<!DOCTYPE html>' + 
+    html: '<!DOCTYPE html>' +
     '<html>' +
-      '<head>' + 
-      '</head>' + 
-      '<body>' + 
+      '<head>' +
+      '</head>' +
+      '<body>' +
         '<h1>LostAndFind에서 인증번호를 보내드립니다.~~~~</h1>'+
         '<h2>' + pw + '</h2>' +
-        '<h2> 인증번호 : ' + randNumber+ '</h2>' +  
-      '</body>'+ 
+        '<h2> 인증번호 : ' + randNumber+ '</h2>' +
+      '</body>'+
     '</html>'
   };
 
@@ -93,7 +93,28 @@ router.post('/sendEmail', function(req, res, next){
       return true;
     }
   });
-  res.json(randNumber);
+  res.send(randNumber);
+});
+
+
+//아이디 중복 확인 router
+router.post('/Duplicate', function(req, res, next){
+
+  console.log("----------------------");
+  console.log("horang.js -> /Duplicate 아이디 중복확인");
+
+  var id = req.body.id;
+  var result = "";
+
+  var selectQuery = 'select * from laf.user where id = \''+ id + '\';';  //아이디 찾는 select문
+  console.log(selectQuery);
+  mysql.select(selectQuery, function(rows){
+    if(rows[0]!=null){
+      result = "ok";
+    }
+    console.log(result);
+    res.send(result);
+  });
 });
 
 

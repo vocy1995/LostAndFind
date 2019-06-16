@@ -78,7 +78,7 @@ public class CreateBoardActivity extends AppCompatActivity {
     private final static int IMAGE_RESULT = 200;
 
     //데이터를 받아올 URL
-    String url = "http://192.168.1.3:3000";
+    String url = "http://192.168.0.23:3000";
 
     //Spinner 객체 및 변수 선언
     Spinner type_question;
@@ -105,14 +105,17 @@ public class CreateBoardActivity extends AppCompatActivity {
     private ArrayList<String> permissions = new ArrayList<>();
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
-
+    String name_get;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_board);
         askPermissions();
-        initRetrofitClient();
 
+        initRetrofitClient();
+        Intent get = getIntent();
+        name_get = get.getStringExtra("name");
+        System.out.println("name get : "+ name_get);
         title = (EditText) findViewById(R.id.title);
         location = (TextView) findViewById(R.id.location);
         content = (EditText) findViewById(R.id.content);
@@ -221,10 +224,12 @@ public class CreateBoardActivity extends AppCompatActivity {
                         break;
                     }
                 }
+                //지도로 값 넘기기
                 mapIntent.putExtra("boardType", String.valueOf(boardTypePosition));
                 mapIntent.putExtra("title", title_text);
                 mapIntent.putExtra("content", content_text);
                 mapIntent.putExtra("hashTag", hashTag_text);
+                mapIntent.putExtra("name", name_get);
                 startActivity(mapIntent);
             }
         });
@@ -239,8 +244,8 @@ public class CreateBoardActivity extends AppCompatActivity {
         if (reqMapIntent.getExtras() == null) {
             location.setText("지도 아이콘을 클릭해서 위치를 지정해주세요");
         } else {
-            int type_questionPositon = Integer.parseInt(reqMapIntent.getExtras().getString("boardType"));
-            type_question.setSelection(type_questionPositon);
+            //int type_questionPositon = Integer.parseInt(reqMapIntent.getExtras().getString("boardType"));
+            //type_question.setSelection(type_questionPositon);
             title.setText(reqMapIntent.getExtras().getString("title"));
             content.setText(reqMapIntent.getExtras().getString("content"));
             hashTag.setText(reqMapIntent.getExtras().getString("hashTag"));
@@ -258,7 +263,7 @@ public class CreateBoardActivity extends AppCompatActivity {
                 Intent reqMapIntent = getIntent();
                 latitude = reqMapIntent.getExtras().getString("latitude");
                 longitude = reqMapIntent.getExtras().getString("longitude");
-                System.out.println(latitude);
+                name_get = reqMapIntent.getExtras().getString("name");
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.accumulate("type_question", type_question_text);
@@ -268,6 +273,8 @@ public class CreateBoardActivity extends AppCompatActivity {
                 jsonObject.accumulate("content", content_text);
                 jsonObject.accumulate("latitude", latitude);
                 jsonObject.accumulate("longitude", longitude);
+                jsonObject.accumulate("board_writer", name_get);
+                System.out.println("name get : "+ name_get);
 
                 //accumulate이거 뒤에가 데이터 전송하는거라 여기서 TEXTVIEW 로그인 뷰 긁어오면 데이터 전송은 가능 근데 전송한 데이터를 db로 넣어야할듯
                 HttpURLConnection con = null;
@@ -408,7 +415,7 @@ public class CreateBoardActivity extends AppCompatActivity {
 
         if (resultCode == Activity.RESULT_OK) {
 
-            ImageView imageView = findViewById(R.id.photo_btn);
+            //ImageView imageView = findViewById(R.id.photo_btn);
 
             if (requestCode == IMAGE_RESULT) {
 
@@ -416,7 +423,7 @@ public class CreateBoardActivity extends AppCompatActivity {
                 String filePath = getImageFilePath(data);
                 if (filePath != null) {
                     mBitmap = BitmapFactory.decodeFile(filePath);
-                    imageView.setImageBitmap(mBitmap);
+                    //imageView.setImageBitmap(mBitmap);
                 }
             }
 
@@ -541,7 +548,9 @@ public class CreateBoardActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                    Toast.makeText(getApplicationContext(), response.code() + " ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "게시글이 작성되었습니다.", Toast.LENGTH_SHORT).show();
+                    Intent home = new Intent(CreateBoardActivity.this,Home.class);
+                    startActivity(home);
                 }
 
                 @Override

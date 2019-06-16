@@ -82,7 +82,7 @@ public class SignActivity extends AppCompatActivity {
         sign_btn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new IDJSONTask().execute("http://192.168.1.3:3000/Duplicate");
+                new IDJSONTask().execute("http://192.168.0.23:3000/Duplicate");
 
             }
         });
@@ -92,8 +92,8 @@ public class SignActivity extends AppCompatActivity {
         signup_btn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pw = pw_text.getText().toString();
-                repeatpw = repeatpw_text.getText().toString();
+                pw = tvPw.getText().toString();
+                repeatpw = tvPwConfirm.getText().toString();
                 if (emailNum == 0) {
                     Toast.makeText(getApplicationContext(), "이메일 인증을 해주세요.", Toast.LENGTH_SHORT).show();
                 }else if(idNum == 0) {
@@ -101,7 +101,7 @@ public class SignActivity extends AppCompatActivity {
                 }else if (pw.equals(repeatpw)==false) {
                     Toast.makeText(getApplicationContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
                 } else {
-                    new sign().execute("http://192.168.60.51:3000/sign");
+                    new sign().execute("http://192.168.0.23:3000/sign");
                 }
 
             }
@@ -231,10 +231,8 @@ public class SignActivity extends AppCompatActivity {
                     jarray = new JSONArray(json_add);
                     HashMap<String, String> map = new HashMap<String, String>();
                     JSONObject obj = jarray.getJSONObject(0);
-
                     //ImageView[] imageViewList = new ImageView[]{fl};
                     map.put("result",obj.getString("result")); //93~99까지는 id값을 정확히 파싱하기 위해 하는 작업
-
                     success_message = map.get("result");// id값을 find_id에 넣는다*/
                     success_message = buffer.toString();
                     System.out.println("넣은 값 " + success_message);
@@ -274,10 +272,10 @@ public class SignActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... urls) {
             try {
-                name = name_text.getText().toString();
-                email = email_text.getText().toString();
-                id = id_text.getText().toString();
-                pw = pw_text.getText().toString();
+                name = tvName.getText().toString();
+                email = tvEmail.getText().toString();
+                id = tvId.getText().toString();
+                pw = tvPw.getText().toString();
 
                 System.out.println("name  : " + name);
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
@@ -344,7 +342,7 @@ public class SignActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            if (result.equals("success")) {
+            if (success_message.equals("success")==true) {
                 System.out.println("성공");
                 Toast.makeText(getApplicationContext(), "회원가입에 성공하였습니다", Toast.LENGTH_SHORT).show();
                 onBackPressed();

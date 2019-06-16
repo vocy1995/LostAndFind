@@ -6,6 +6,18 @@ var mysql = require("../public/javascripts/mysql");
 multer = require('multer')
 path = require('path');
 crypto = require('crypto');
+var NodeGeocoder = require('node-geocoder');
+
+var ip='http://192.168.0.23:3000/upload/';
+
+var options={
+  provider: 'google',
+  httpAdapter: 'https',
+  apiKey: 'AIzaSyDl51o1oNDyv5urTP7ItU41XDuM8pez3gU', // for Mapquest, OpenCage, Google Premier
+  formatter: null
+};
+var geocoder = NodeGeocoder(options);
+
 
 storage = multer.diskStorage({
   destination: './upload',
@@ -34,14 +46,15 @@ router.post('/createBoardText', function(req, res, next) {
   var hashTag = req.body.hashTag;
   var latitude = req.body.latitude;
   var longitude = req.body.longitude;
+  var board_writer = req.body.board_writer;
   //현재 날짜
   var dt = new Date();
   var time = dt.toFormat('YYYY년 MM월 DD일 HH24시 MI분 SS초');
   var countQuery = "select count(*) as count from laf.bullet_board";  //현재 게시글 숫자 확인
   mysql.select(countQuery, function(rows){
     var no = rows[0].count + 1;
-    var insertQuery = "INSERT INTO laf.bullet_board (no, time, title, type_question, latitude, longitude, content, hash_tag, location)"
-      +"VALUES ('"+no+"', '"+time+"', '"+title+"', '"+typeQuestion+"', '"+latitude+"','"+longitude+"', '"+content+"', '"+hashTag+"', '"+location+"');";  //게시글 삽입 Query
+    var insertQuery = "INSERT INTO laf.bullet_board (no, time, title, type_question, latitude, longitude, content, hash_tag, location,board_writer)"
+      +"VALUES ('"+no+"', '"+time+"', '"+title+"', '"+typeQuestion+"', '"+latitude+"','"+longitude+"', '"+content+"', '"+hashTag+"', '"+location+"', '"+board_writer+"');";  //게시글 삽입 Query
     console.log(insertQuery);
     mysql.select(insertQuery, function(rows){});
   });
@@ -61,7 +74,9 @@ router.post('/createBoardImageUpload', multer({storage: storage}).single('upload
     var selectTimeQuery = "select time from laf.bullet_board where no = '"+no+"'";
     mysql.select(selectTimeQuery, function(timeRows){
       var time = timeRows[0].time;
-      var updateQuery = "UPDATE laf.bullet_board SET img_url = '"+req.file.destination + "/" +req.file.filename+"' WHERE (no = '"+no+"') and (time = '"+time+"');";
+      var image_url_total=ip+req.file.filename;
+      var updateQuery = "UPDATE laf.bullet_board SET img_url = '"+image_url_total+"' WHERE (no = '"+no+"') and (time = '"+time+"');";
+      console.log(updateQuery);
       mysql.select(updateQuery, function(rows){
       });
     })

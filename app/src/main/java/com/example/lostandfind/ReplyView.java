@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -37,6 +38,7 @@ public class ReplyView extends Activity {
     static String CONTENT = "content";
     static String TITLE_NO = "title_no";
     static String WRITER = "writer";
+    static String TIME = "time";
 
     ListView listview;
     ReplyViewAdapter adapter;
@@ -45,25 +47,25 @@ public class ReplyView extends Activity {
     String get_content;
     String success_message;
 
-    String id_test;
+    String name_get;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.comment_main);
-        reply_load("http://192.168.60.54:3000/reply");
+        reply_load("http://192.168.0.23:3000/reply");
         post = findViewById(R.id.post);
         content = findViewById(R.id.add_comment); //댓글 텍스트뷰를 사용하기위한
 
         Intent i = getIntent();
         title_no = i.getStringExtra("no");
-        id_test = i.getStringExtra("id");
-        System.out.println("get_id_test : "+ id_test);
+        name_get = i.getStringExtra("name");
+        System.out.println("get_id_test : "+ name_get);
 
         post.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {
-                new Reply_Post().execute("http://192.168.60.54:3000/replyPost");
+                new Reply_Post().execute("http://192.168.0.23:3000/replyPost");
                 onBackPressed();
             }
         });
@@ -135,13 +137,12 @@ public class ReplyView extends Activity {
                 map.put("content", obj.getString("content"));
                 map.put("title_no", obj.getString("title_no"));
                 map.put("writer", obj.getString("writer"));
+                map.put("time",obj.getString("time"));
                 System.out.println("map " + map);
                 if(map.get("title_no").equals(title_no)){ //Listview에서 글에 해당하는 번호를 title_no로 설정
                     arraylist.add(map);
                 }
             }
-
-
             listview = (ListView) findViewById(R.id.listview_reply);
             // Pass the results into ListViewAdapter.java
 
@@ -170,8 +171,8 @@ public class ReplyView extends Activity {
 
                 jsonObject.accumulate("title_no",title_no);
                 jsonObject.accumulate("content",get_content);
-                jsonObject.accumulate("writer",id_test);
-                System.out.println("writer_post: no + "+id_test);
+                jsonObject.accumulate("writer",name_get);
+                System.out.println("writer_post: no + "+name_get);
 
                 //accumulate이거 뒤에가 데이터 전송하는거라 여기서 TEXTVIEW 로그인 뷰 긁어오면 데이터 전송은 가능 근데 전송한 데이터를 db로 넣어야할듯
                 HttpURLConnection con = null;

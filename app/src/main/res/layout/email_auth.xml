@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="vertical"
-android:layout_width="match_parent"
-android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
 
     // 상단바 명칭
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/edge"
-        android:gravity="center|left"
-        android:padding="10dp"
-        android:text="이메일 인증"
-        android:textSize="20dp"
-        android:textStyle="bold" />
 
     //레이아웃 명칭
     <TextView
@@ -58,7 +46,7 @@ android:layout_height="match_parent">
             android:layout_height="match_parent"
             android:layout_marginLeft="60dp"
             android:gravity="center"
-            android:textColor="	#DC143C"
+            android:textColor="   #DC143C"
             android:text="시간내에 인증번호를 입력하세요." />
 
         <TextView
@@ -68,7 +56,7 @@ android:layout_height="match_parent">
             android:gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:text="3:00"
-            android:textColor="	#DC143C"
+            android:textColor="   #DC143C"
             android:textSize="20sp" />
     </LinearLayout>
 

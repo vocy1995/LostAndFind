@@ -50,12 +50,14 @@ public class PrintMapMarker extends FragmentActivity implements OnMapReadyCallba
     String url = "http://192.168.1.3:3000";
 
     String bulletinsNumber;
-
+    String name,type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_print_map_marker);
-
+        Intent get = getIntent();
+        name = get.getStringExtra("name");
+        type = get.getStringExtra("type");
         geocoder = new Geocoder(this);
 
         mapTextView = (TextView) findViewById(R.id.mapTextView);
@@ -64,8 +66,10 @@ public class PrintMapMarker extends FragmentActivity implements OnMapReadyCallba
         printMapButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view){
-                Intent intent = new Intent(PrintMapMarker.this, TimeLine.class);
+                Intent intent = new Intent(PrintMapMarker.this, TypeView.class);
                 intent.putExtra("city", userClick_city);
+                intent.putExtra("name",name);
+                intent.putExtra("type",type);
                 startActivity(intent);
             }
         });
@@ -124,7 +128,7 @@ public class PrintMapMarker extends FragmentActivity implements OnMapReadyCallba
                     } else {
                         userClick_city = list.get(0).getLocality();
                         System.out.println(list.get(0).getLocality());
-                        new JSONTask().execute("http://192.168.1.3:3000/selectBulletinNum");
+                        new JSONTask().execute("http://192.168.163.1:3000/selectBulletinNum");
                         mapTextView.setText(list.get(0).getLocality());
                     }
                 }

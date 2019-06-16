@@ -45,6 +45,7 @@ public class ReplyViewAdapter extends BaseAdapter {
 
         TextView board_content;
         TextView board_writer;
+        TextView time;
 
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -56,10 +57,12 @@ public class ReplyViewAdapter extends BaseAdapter {
 
         board_writer = (TextView) itemView.findViewById(R.id.reply_writer);
         board_content = (TextView) itemView.findViewById(R.id.comment);
+        time = (TextView) itemView.findViewById(R.id.time);
 
 
         board_writer.setText(resultp.get(ReplyView.WRITER));
-        board_content.setText(resultp.get(ReplyView.CONTENT)); //해당하는값 출력
+        board_content.setText(resultp.get(ReplyView.CONTENT));
+        time.setText(resultp.get(ReplyView.TIME));//해당하는값 출력
 
         return itemView;
     }

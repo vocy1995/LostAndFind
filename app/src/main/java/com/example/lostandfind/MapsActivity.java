@@ -1,353 +1,305 @@
 package com.example.lostandfind;
 
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.os.Build;
+import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.Manifest;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.Socket;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
-public class SignActivity extends AppCompatActivity {
-    ArrayList<HashMap<String, String>> arraylist;
-    private TextView tvName;        // 이름
-    private TextView tvEmail;       // 이메일
-    private TextView tvId;          // 아이디
-    private TextView tvPw;          // 비밀번호
-    private TextView tvPwConfirm;   // 비밀번호 재확인
-    private Button btnSend;         // 이메일 인증보내기
-    private Button btnCheck;        // 아이디 중복확인
-    private Button btnSignup;       // 회원가입
-    private String name, email, id, pw, repeatpw;
-    private EditText name_text, email_text, id_text, pw_text, repeatpw_text;
-    String success_message;
-    int idDuplicateNumber = 0;
-    JSONArray jarray; //parse를 위한 jarray 사용
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    //GoogleMap 객체
+    private GoogleMap mMap;
+    Geocoder geocoder;
 
-    //이메일 인증 확인
-    int emailNum = 0;
-    int idNum = 0;
+    // 출처: https://mainia.tistory.com/1153 [녹두장군 - 상상을 현실로]
+    private final int PERMISSIONS_ACCESS_FINE_LOCATION = 1000;
+    private final int PERMISSIONS_ACCESS_COARSE_LOCATION = 1001;
+    private boolean isAccessFineLocation = false;
+    private boolean isAccessCoarseLocation = false;
+    private boolean isPermission = false;
+
+    //GPSTracker class
+    private GpsInfo gps;
+    Double user_latitude, user_longitude;
+    Double click_latitude, click_longitude;
+
+    //onCreateView에 사용
+    MapView mapView;
+    TextView mapTextView;
+    Button mapButton;
+
+    //setCurrentLocation에 사용
+    private static final LatLng DEFAULT_LOCATION = new LatLng(37.56, 126.97);
+
+    private GoogleMap googleMap = null;
+    private Marker currentMarker = null;
+
+    //https://duzi077.tistory.com/122
+    public void setCurrentLocation(Location location, String markerTitle, String markerSnippet) {
+        if (currentMarker != null) currentMarker.remove();
+
+        if (location != null) {
+            //현재 위치의 위도 경도 가져오기
+            LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(currentLocation);
+            markerOptions.title(markerTitle);
+            markerOptions.snippet(markerSnippet);
+            markerOptions.draggable(true);
+
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            currentMarker = this.googleMap.addMarker(markerOptions);
+
+            this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+            return;
+        }
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(DEFAULT_LOCATION);
+        markerOptions.title(markerTitle);
+        markerOptions.snippet(markerSnippet);
+        markerOptions.draggable(true);
+
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        currentMarker = this.googleMap.addMarker(markerOptions);
+
+        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(DEFAULT_LOCATION));
+    }
+
+    //Fragment예제 -> 자동검색
+    //http://snowdeer.github.io/android/2017/08/21/place-picker-sample/
+    static final String TAG = "PlaceAutocomplete";  //Log.i에 사용
+    PlaceAutocompleteFragment autocompleteFragment;
+
+    int AUTOCOMPLETE_REQUEST_CODE = 1;
+    Intent getCreateBoardintent;
+
+    String intentBoardType, intentTitle, intentContent, intentHashTag, intentName;
 
     @Override
-    protected void onCreate(Bundle saveInstanceState) {
-        super.onCreate(saveInstanceState);
-        setContentView(R.layout.sign);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+        geocoder = new Geocoder(this);
+        mapTextView = (TextView) findViewById(R.id.mapTextView);
+        //인텐트 값 가져오기
+        getCreateBoardintent = getIntent();
+        intentBoardType = getCreateBoardintent.getExtras().getString("boardType");
+        intentTitle = getCreateBoardintent.getExtras().getString("title");
+        intentContent = getCreateBoardintent.getExtras().getString("content");
+        intentHashTag = getCreateBoardintent.getExtras().getString("hashTag");
+        intentName = getCreateBoardintent.getExtras().getString("name");
+        System.out.println("intentBoardType1 : " + intentBoardType);
+        System.out.println("intentTitle : " + intentTitle);
 
-        tvName = (TextView) findViewById(R.id.textview_sign_name);              // 이름
-        tvEmail = (TextView) findViewById(R.id.textview_sign_email);            // 이메일
-        tvId = (TextView) findViewById(R.id.textview_sign_id);                  // 아이디
-        tvPw = (TextView) findViewById(R.id.textview_sign_pw);                  // 패스워드
-        tvPwConfirm = (TextView) findViewById(R.id.textview_sign_repeatpw);     // 패스워드 재입력
-        btnSend = (Button) findViewById(R.id.btn_sign_sendemail);               // 이메일 인증
-        btnCheck = (Button) findViewById(R.id.btn_sign_checkid);                // 아이디 중복체크
-        btnSignup = (Button) findViewById(R.id.btn_sign_signup);                // 회원가입 완료
-        name_text = findViewById(R.id.textview_sign_name);
-        email_text = findViewById(R.id.textview_sign_email);
-        pw_text = findViewById(R.id.textview_sign_pw);
-        repeatpw_text = findViewById(R.id.textview_sign_repeatpw);
-
-        //회원가입화면(이메일 인증버튼) -> 이메일 인증 화면
-        Button sendeamil_btn = (Button) findViewById(R.id.btn_sign_sendemail);
-        sendeamil_btn.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                emailNum = 1;
-                Intent authActivityintent = new Intent(getApplicationContext(), AuthActivity.class);
-                authActivityintent.putExtra("email", tvEmail.getText().toString());
-                startActivity(authActivityintent);
+        //GPS 사용유무 가져오기
+        geocoder = new Geocoder(this);
+        gps = new GpsInfo(MapsActivity.this);
+        if (gps.isGetLocation()) {
+            user_latitude = gps.getLatitude();
+            user_longitude = gps.getLongitude();
+            List<Address> list = null;
+            try {
+                list = geocoder.getFromLocation(
+                        user_latitude, // 위도
+                        user_longitude, // 경도
+                        10); // 얻어올 값의 개수
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("test", "입출력 오류 - 서버에서 주소변환시 에러발생");
             }
-        });
-
-        //회원가입화면(아이디 중복체크버튼) -> 결과메시지 출력
-        Button sign_btn = (Button) findViewById(R.id.btn_sign_checkid);
-        sign_btn.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new IDJSONTask().execute("http://192.168.1.3:3000/Duplicate");
-
-            }
-        });
-
-        //회원가입화면(회원가입 완료 버튼) -> 회원가입 완료 토스트 출력 로그인 화면
-        Button signup_btn = (Button) findViewById(R.id.btn_sign_signup);
-        signup_btn.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pw = pw_text.getText().toString();
-                repeatpw = repeatpw_text.getText().toString();
-                if (emailNum == 0) {
-                    Toast.makeText(getApplicationContext(), "이메일 인증을 해주세요.", Toast.LENGTH_SHORT).show();
-                }else if(idNum == 0) {
-                    Toast.makeText(getApplicationContext(), "아이디 중복확인을 해주세요.", Toast.LENGTH_SHORT).show();
-                }else if (pw.equals(repeatpw)==false) {
-                    Toast.makeText(getApplicationContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
+            if (list != null) {
+                if (list.size() == 0) {
+                    System.out.println("해당되는 주소 정보는 없습니다");
+                    mapTextView.setText("위도 : " + user_latitude + "  경도 : " + user_longitude);
                 } else {
-                    new sign().execute("http://192.168.60.51:3000/sign");
+                    System.out.println(list.get(0).getAddressLine(0));
+                    mapTextView.setText(list.get(0).getAddressLine(0));
                 }
+            }
+        } else {
+            gps.showSettingsAlert();
+        }
+        callPermission();
 
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        if (user_latitude != 0.0) {
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+        }
+
+        mapButton = (Button) findViewById(R.id.mapButton);
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double intentLatitude, intentLongitude;
+                if (click_latitude == null) {
+                    intentLatitude = user_latitude;
+                    intentLongitude = user_longitude;
+                } else {
+                    intentLatitude = click_latitude;
+                    intentLongitude = click_longitude;
+                }
+                getCreateBoardintent = getIntent();
+                Intent createBoardIntent = new Intent(getApplicationContext(), CreateBoardActivity.class);
+                createBoardIntent.putExtra("boardType", intentBoardType);
+                createBoardIntent.putExtra("title", intentTitle);
+                createBoardIntent.putExtra("content", intentContent);
+                createBoardIntent.putExtra("hashTag", intentHashTag);
+                createBoardIntent.putExtra("latitude", String.valueOf(intentLatitude));
+                createBoardIntent.putExtra("longitude", String.valueOf(intentLongitude));
+                createBoardIntent.putExtra("mapLocation", mapTextView.getText().toString());
+                createBoardIntent.putExtra("name", intentName);
+                startActivity(createBoardIntent);
             }
         });
     }
 
-    //아이디 중복확인을 위한 아이디 정보 서버로 값전달
-    public class IDJSONTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                tvId = (TextView) findViewById(R.id.textview_sign_id);                  // 아이디
-                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("id", tvId.getText().toString());
-
-                //accumulate이거 뒤에가 데이터 전송하는거라 여기서 TEXTVIEW 로그인 뷰 긁어오면 데이터 전송은 가능 근데 전송한 데이터를 db로 넣어야할듯
-                HttpURLConnection con = null;
-                BufferedReader reader = null;
-                try {
-                    URL url = new URL(urls[0]);
-                    //연결을 함
-                    con = (HttpURLConnection) url.openConnection();
-                    con.setRequestMethod("POST");//POST방식으로 보냄
-                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
-                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
-                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
-                    con.setDoOutput(true);//Outstream으로 post 데이터를 넘겨주겠다는 의미
-                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
-                    con.connect();
-                    //서버로 보내기위해서 스트림 만듬
-                    OutputStream outStream = con.getOutputStream();
-                    //버퍼를 생성하고 넣음
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
-                    writer.write(jsonObject.toString());
-                    writer.flush();
-                    writer.close();//버퍼를 받아줌
-
-                    //서버로 부터 데이터를 받음
-                    InputStream stream = con.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(stream));
-                    StringBuffer buffer = new StringBuffer();
-                    String line = "";
-                    while ((line = reader.readLine()) != null) {
-                        buffer.append(line);
-                    }
-                    return buffer.toString();//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (con != null) {
-                        con.disconnect();
-                    }
-                    try {
-                        if (reader != null) {
-                            reader.close();//버퍼를 닫아줌
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            System.out.println(result);
-            if(result.equals("ok")){
-                System.out.println("ok");
-                Toast.makeText(getApplicationContext(), "아이디가 중복되었습니다.", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(getApplicationContext(), "사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
-                idNum = 1;
-            }
-
+    //권한요청
+    private void callPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_ACCESS_FINE_LOCATION);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSIONS_ACCESS_COARSE_LOCATION);
+        } else {
+            isPermission = true;
         }
     }
 
-    //이메일 정보 서버로 값전달
-    public class EmailJSONTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                tvEmail = (EditText) findViewById(R.id.textview_sign_email);
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(final GoogleMap googleMap) {
+        //출처: https://bitsoul.tistory.com/145 [Happy Programmer~]
+        // ↑매개변수로 GoogleMap 객체가 넘어옵니다.
 
-                System.out.println("사용자가 입력한 이메일  : " + tvEmail.getText().toString());
-                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("email", tvEmail.getText().toString());
-                //accumulate이거 뒤에가 데이터 전송하는거라 여기서 TEXTVIEW 로그인 뷰 긁어오면 데이터 전송은 가능 근데 전송한 데이터를 db로 넣어야할듯
-                HttpURLConnection con = null;
-                BufferedReader reader = null;
+        // camera 좌표 옮기기
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                new LatLng(user_latitude, user_longitude), 17   // 위도, 경도
+        ));
+
+        // marker 표시
+        // market 의 위치, 타이틀, 짧은설명 추가 가능.
+        MarkerOptions marker = new MarkerOptions();
+
+        marker.position(new LatLng(user_latitude, user_longitude))
+                .title("현재위치");
+        googleMap.addMarker(marker).showInfoWindow(); // 마커추가,화면에출력
+
+        // 마커클릭 이벤트 처리
+        // GoogleMap 에 마커클릭 이벤트 설정 가능.
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                // 마커 클릭시 호출되는 콜백 메서드
+                Toast.makeText(getApplicationContext(),
+                        marker.getTitle() + " 클릭했음"
+                        , Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
+        // 맵 터치 이벤트 구현 //
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng point) {
+                MarkerOptions mOptions = new MarkerOptions();
+                googleMap.clear();
+                //마커 타이틀
+                mOptions.title("마커좌표");
+                click_latitude = point.latitude;   //위도
+                click_longitude = point.longitude; //경도
+                //마커의 스니펫(간단한 텍스트)설정
+                mOptions.snippet(click_latitude.toString() + ", " + click_longitude.toString());
+                // LatLng: 위도 경도 쌍을 나타냄
+                mOptions.position(new LatLng(click_latitude, click_longitude));
+                //마커(핀)추가
+                googleMap.addMarker(mOptions);
+                mapTextView.setText("위도 : " + click_latitude + "  경도 : " + click_longitude);
+                List<Address> list = null;
                 try {
-                    URL url = new URL(urls[0]);
-                    //연결을 함
-                    con = (HttpURLConnection) url.openConnection();
-                    con.setRequestMethod("POST");//POST방식으로 보냄
-                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
-                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
-                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
-                    con.setDoOutput(true);//Outstream으로 post 데이터를 넘겨주겠다는 의미
-                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
-                    con.connect();
-                    //서버로 보내기위해서 스트림 만듬
-                    OutputStream outStream = con.getOutputStream();
-                    //버퍼를 생성하고 넣음
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
-                    writer.write(jsonObject.toString());
-                    writer.flush();
-                    writer.close();//버퍼를 받아줌
-
-                    //서버로 부터 데이터를 받음
-                    InputStream stream = con.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(stream));
-                    StringBuffer buffer = new StringBuffer();
-                    String line = "";
-                    while ((line = reader.readLine()) != null) {
-                        buffer.append(line);
-                    }
-                    /*System.out.println("받은 값 "+buffer);
-                    String json_add = buffer.substring(0,buffer.length());
-                    jarray = new JSONArray(json_add);
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    JSONObject obj = jarray.getJSONObject(0);
-
-                    //ImageView[] imageViewList = new ImageView[]{fl};
-                    map.put("result",obj.getString("result")); //93~99까지는 id값을 정확히 파싱하기 위해 하는 작업
-
-                    success_message = map.get("result");// id값을 find_id에 넣는다*/
-                    success_message = buffer.toString();
-                    System.out.println("넣은 값 " + success_message);
-                    //System.out.println(success_message);
-                    return success_message;//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    list = geocoder.getFromLocation(
+                            click_latitude, // 위도
+                            click_longitude, // 경도
+                            10); // 얻어올 값의 개수
                 } catch (IOException e) {
                     e.printStackTrace();
-                } finally {
-                    if (con != null) {
-                        con.disconnect();
-                    }
-                    try {
-                        if (reader != null) {
-                            reader.close();//버퍼를 닫아줌
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    Log.e("test", "입출력 오류 - 서버에서 주소변환시 에러발생");
+                }
+                if (list != null) {
+                    if (list.size() == 0) {
+                        System.out.println("해당되는 주소 정보는 없습니다");
+                        mapTextView.setText("위도 : " + click_latitude + "  경도 : " + click_longitude);
+                    } else {
+                        System.out.println(list.get(0).getAddressLine(0));
+                        mapTextView.setText(list.get(0).getAddressLine(0));
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-        }
+        });
     }
 
-    //서버로 값전달
-    public class sign extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                name = name_text.getText().toString();
-                email = email_text.getText().toString();
-                id = id_text.getText().toString();
-                pw = pw_text.getText().toString();
-
-                System.out.println("name  : " + name);
-                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("name", name);
-                jsonObject.accumulate("email", email);
-                jsonObject.accumulate("id", id);
-                jsonObject.accumulate("pw", pw);
-
-                //accumulate이거 뒤에가 데이터 전송하는거라 여기서 TEXTVIEW 로그인 뷰 긁어오면 데이터 전송은 가능 근데 전송한 데이터를 db로 넣어야할듯
-                HttpURLConnection con = null;
-                BufferedReader reader = null;
-                try {
-                    URL url = new URL(urls[0]);
-                    //연결을 함
-                    con = (HttpURLConnection) url.openConnection();
-                    con.setRequestMethod("POST");//POST방식으로 보냄
-                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
-                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
-                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
-                    con.setDoOutput(true);//Outstream으로 post 데이터를 넘겨주겠다는 의미
-                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
-                    con.connect();
-                    //서버로 보내기위해서 스트림 만듬
-                    OutputStream outStream = con.getOutputStream();
-                    //버퍼를 생성하고 넣음
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
-                    writer.write(jsonObject.toString());
-                    writer.flush();
-                    writer.close();//버퍼를 받아줌
-
-                    //서버로 부터 데이터를 받음
-                    InputStream stream = con.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(stream));
-                    StringBuffer buffer = new StringBuffer();
-                    String line = "";
-                    while ((line = reader.readLine()) != null) {
-                        buffer.append(line);
-                    }
-                    success_message = buffer.toString();
-                    System.out.println("넣은 값 " + success_message);
-                    return success_message;//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (con != null) {
-                        con.disconnect();
-                    }
-                    try {
-                        if (reader != null) {
-                            reader.close();//버퍼를 닫아줌
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (result.equals("success")) {
-                System.out.println("성공");
-                Toast.makeText(getApplicationContext(), "회원가입에 성공하였습니다", Toast.LENGTH_SHORT).show();
-                onBackPressed();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = (Place) Autocomplete.getPlaceFromIntent(data);
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
             }
         }
     }

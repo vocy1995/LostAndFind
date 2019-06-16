@@ -31,14 +31,14 @@ public class FindidActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // 부모를 받는다.
-        setContentView(R.layout.find_id);      // 어떤 레이아웃을 가리키는가.
-        name=findViewById(R.id.textView_name);
+        setContentView(R.layout.id_find);      // 어떤 레이아웃을 가리키는가.
+
         email=findViewById(R.id.textView_email);
         Button find = findViewById(R.id.btn_id_send);
         find.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {
-                new Find_user().execute("http://192.168.0.2:3000/findid");
+                new Find_user().execute("http://192.168.0.23:3000/findid");
             }
         });
 
@@ -48,15 +48,14 @@ public class FindidActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... urls) {
             try {
-                get_name=name.getText().toString();
+
                 get_email=email.getText().toString();
 
                 System.out.println("name  : " +name);
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("name",get_name);
-                jsonObject.accumulate("email",get_email);
 
+                jsonObject.accumulate("email",get_email);
 
                 //accumulate이거 뒤에가 데이터 전송하는거라 여기서 TEXTVIEW 로그인 뷰 긁어오면 데이터 전송은 가능 근데 전송한 데이터를 db로 넣어야할듯
                 HttpURLConnection con = null;

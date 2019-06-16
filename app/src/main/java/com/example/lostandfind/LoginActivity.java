@@ -32,9 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     String id;
     String pw;
     String success_message;
-
-    String id_post;
-    JSONArray jarray; //parse를 위한 jarray 사용
+    String name_get;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                new Login().execute("http://192.168.60.54:3000/login");
+                new Login().execute("http://192.168.0.23:3000/login");
 
             }
         });
@@ -90,25 +88,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
     public class Login extends AsyncTask<String, Void, String> {
 
         @Override
@@ -155,8 +134,13 @@ public class LoginActivity extends AppCompatActivity {
                         buffer.append(line);
                     }
                     System.out.println(buffer.toString());
-                    success_message = buffer.toString();
-                    return success_message;//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
+
+
+                    name_get= buffer.toString();
+
+
+                    System.out.println("test : "+ name_get);
+                    return name_get;//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
 
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -182,15 +166,15 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            /*if(success_message.equals("success")){
+            if(name_get.equals(null)==false){
                 Toast.makeText(getApplicationContext(),"로그인에 성공하였습니다", Toast.LENGTH_SHORT).show();
-
+                Intent intent = new Intent(getApplicationContext(), Home.class);
+                intent.putExtra("name",name_get); //댓글 작성시 필요한 id값 전송
+                startActivity(intent);
             }else {
                 Toast.makeText(getApplicationContext(), "아이디와 패스워드를 확인하세요", Toast.LENGTH_SHORT).show();
-            }*/
-            Intent intent = new Intent(getApplicationContext(), TimeLine.class);
-            //intent.putExtra("id",id); //댓글 작성시 필요한 id값 전송
-            startActivity(intent);
+            }
+
         }
     }
 }
