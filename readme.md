@@ -69,7 +69,7 @@
 ##### [SearchResultAdapter.java]
 - 검색값 화면에 출력 클래스
 
-#####[TypeView.java]
+##### [TypeView.java]
 - 분실물 습득물 서버와 통신후 값 저장하는 클래스
 
 ##### [TypeViewAdapter.java]
